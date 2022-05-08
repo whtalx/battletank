@@ -1,0 +1,29 @@
+{
+  "extends": ["airbnb", "react-app"],
+  "parser": "@babel/eslint-parser",
+  "rules": {
+    "import/no-anonymous-default-export": ["error", {"allowObject": true}],
+    "import/no-extraneous-dependencies": "off",
+    "no-else-return": "off",
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-nested-ternary": "off",
+    "no-param-reassign": ["error", { "props": false }],
+    "no-prototype-builtins": "off",
+    "no-unused-vars": ["error", {
+      "args": "after-used",
+      "destructuredArrayIgnorePattern": "^_",
+      "ignoreRestSiblings": true
+    }],
+    "object-curly-newline": ["error", {
+        "ObjectExpression": { "consistent": true, "multiline": true },
+        "ObjectPattern": { "consistent": true, "multiline": true },
+        "ImportDeclaration": { "consistent": true, "multiline": true },
+        "ExportDeclaration": { "consistent": true, "multiline": true }
+    }],
+    "prefer-arrow-callback": "off",
+    "quote-props": ["error", "as-needed", { "numbers": true }],
+    "import/prefer-default-export": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off"
+  }
+}

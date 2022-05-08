@@ -1,0 +1,54 @@
+{
+  "name": "battletank",
+  "version": "0.0.0",
+  "description": "Event-based remake of 8-bit game",
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whtalx/battletank"
+  },
+  "keywords": [
+    "battle city",
+    "nes",
+    "dendy"
+  ],
+  "author": "whtalx",
+  "scripts": {
+    "start": "webpack serve --env development --config webpack.config.js",
+    "build": "webpack --env production --config webpack.config.js"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.0.13",
+    "immer": "^9.0.12",
+    "react": "^18.1.0",
+    "three": "^0.140.0",
+    "zustand": "^4.0.0-rc.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "^7.17.10",
+    "@babel/preset-react": "^7.16.7",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
+    "@react-three/babel": "^0.1.0",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "path": "^0.12.7",
+    "react-refresh": "^0.13.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0",
+    "webpack-merge": "^5.8.0"
+  }
+}
