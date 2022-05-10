@@ -1,6 +1,6 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = function config({ development }) {
@@ -32,17 +32,18 @@ module.exports = function config({ development }) {
             },
           },
         },
-        {
-          test: /\.css$/,
-          use: [
-            { loader: development ? 'style-loader' : MiniCssExtractPlugin.loader },
-            { loader: 'css-loader' },
-          ],
-        },
       ],
     },
     plugins: [
       new HtmlWebpackPlugin({ template: path.resolve(__dirname, './src/index.html') }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, './assets'),
+            to: '.',
+          },
+        ],
+      }),
     ],
     resolve: { extensions: ['', '.js', '.jsx'] },
   };
@@ -59,13 +60,6 @@ module.exports = function config({ development }) {
       historyApiFallback: true,
       hot: true,
     };
-  } else {
-    result.plugins.push(
-      new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css',
-        chunkFilename: '[id].[contenthash].css',
-      }),
-    );
   }
 
   return result;

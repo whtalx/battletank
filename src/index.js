@@ -6,8 +6,6 @@ import App from './components';
 
 import { preventDefault } from './utils';
 
-import './style.css';
-
 function getSize() {
   return { width: window.innerWidth, height: window.innerHeight };
 }

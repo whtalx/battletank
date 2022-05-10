@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: black;
+}
+
+#canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+noscript {
+  padding: 10px;
+  display: block;
+  color: #AAA;
+  font-family: Terminal, Courier, monospace;
+}
+
+.underline {
+  animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+  0% {
+    color: inherit;
+  }
+  50% {
+    color: inherit;
+  }
+  51% {
+    color: black;
+  }
+  to {
+    color: black;
+  }
+}
