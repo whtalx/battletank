@@ -8,24 +8,41 @@ export const Context = createContext();
 Context.displayName = 'LayoutContext';
 
 function getDimensions({ width, height }) {
+  const dimensions = {};
   const aspect = width / height;
-  const layout = aspect > 1 ? LAYOUT.HORIZONTAL : LAYOUT.VERTICAL;
+  dimensions.layout = aspect > 1 ? LAYOUT.HORIZONTAL : LAYOUT.VERTICAL;
 
   if (aspect > 1) {
-    return {
-      layout,
-      width: height * LAYOUT.WIDTH / LAYOUT.HEIGHT,
-      height,
-      unit: height / LAYOUT.HEIGHT,
-    };
+    dimensions.width = height * LAYOUT.WIDTH / LAYOUT.HEIGHT;
+    dimensions.height = height;
+    dimensions.unit = height / LAYOUT.HEIGHT;
   } else {
-    return {
-      layout,
-      width,
-      height: width * LAYOUT.HEIGHT / LAYOUT.WIDTH,
-      unit: width / LAYOUT.WIDTH,
-    };
+    dimensions.width = width;
+    dimensions.height = width * LAYOUT.HEIGHT / LAYOUT.WIDTH;
+    dimensions.unit = width / LAYOUT.WIDTH;
   }
+
+  dimensions.map = {
+    position: [
+      -LAYOUT.MAP_OFFSET * dimensions.unit,
+      0,
+      0,
+    ],
+    size: LAYOUT.MAP_SIZE * dimensions.unit,
+  };
+
+  dimensions.block = {
+    position: [
+      0,
+      -LAYOUT.BLOCK_OFFSET * dimensions.unit + dimensions.map.size / 2,
+      0,
+    ],
+    size: LAYOUT.BLOCK_SIZE * dimensions.unit,
+  };
+
+  dimensions.block.position[0] = -dimensions.block.position[1] + dimensions.map.position[0];
+
+  return dimensions;
 }
 
 export function Provider({ children }) {

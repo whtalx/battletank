@@ -6,10 +6,10 @@ import { useTexture, useTextureAnimation } from '../../hooks';
 
 import { BLOCK } from '../../constants';
 
-function Brick({ position, unit }) {
+function Brick({ position, size }) {
   const texture = useTexture(BLOCK.BRICK);
   return (
-    <sprite position={position} scale={[8 * unit, 8 * unit, 0]}>
+    <sprite position={position} scale={[size, size, 0]}>
       <spriteMaterial
         map={texture}
         sizeAttenuation
@@ -18,10 +18,12 @@ function Brick({ position, unit }) {
   );
 }
 
-function Steel({ position, unit }) {
+function Steel({ position, size }) {
   const texture = useTexture(BLOCK.STEEL);
+  const [x, y, z] = position;
+
   return (
-    <sprite position={position} scale={[8 * unit, 8 * unit, 0]}>
+    <sprite position={[x + size, y, z]} scale={[size, size, 0]}>
       <spriteMaterial
         map={texture}
         sizeAttenuation
@@ -30,10 +32,12 @@ function Steel({ position, unit }) {
   );
 }
 
-function Tree({ position, unit }) {
+function Tree({ position, size }) {
   const texture = useTexture(BLOCK.TREE);
+  const [x, y] = position;
+
   return (
-    <sprite position={position} scale={[8 * unit, 8 * unit, 0]}>
+    <sprite position={[x + size * 2, y, 3]} scale={[size, size, 0]}>
       <spriteMaterial
         map={texture}
         sizeAttenuation
@@ -42,25 +46,26 @@ function Tree({ position, unit }) {
   );
 }
 
-function Water({ position, unit }) {
+function Water({ position, size }) {
   const texture = useTexture(BLOCK.WATER);
   useTextureAnimation({ duration: 1.25, offset: 0.5, texture });
+  const [x, y, z] = position;
 
   return (
-    <sprite position={position} scale={[8 * unit, 8 * unit, 0]}>
+    <sprite position={[x + size * 3, y, z]} scale={[size, size, 0]}>
       <spriteMaterial map={texture} />
     </sprite>
   );
 }
 
 export default function Terrain() {
-  const { unit } = useContext(Layout.Context);
+  const { block } = useContext(Layout.Context);
   return (
     <>
-      <Brick position={[-4 * unit, 4 * unit, 0]} unit={unit} />
-      <Tree position={[4 * unit, 4 * unit, 0]} unit={unit} />
-      <Steel position={[-4 * unit, -4 * unit, 0]} unit={unit} />
-      <Water position={[4 * unit, -4 * unit, 0]} unit={unit} />
+      <Brick {...block} />
+      <Steel {...block} />
+      <Tree {...block} />
+      <Water {...block} />
     </>
   );
 }
