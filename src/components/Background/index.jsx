@@ -8,7 +8,7 @@ import { COLORS } from '../../constants';
 // import { KEYS } from '../../constants/settings';
 
 export default function Background() {
-  const { width, height, map } = useContext(Layout.Context);
+  const { map, screen } = useContext(Layout.Context);
 
   // useKeyEvent({
   //   key: KEYS.START,
@@ -20,7 +20,7 @@ export default function Background() {
   return (
     <>
       <mesh position={[0, 0, 0]}>
-        <planeBufferGeometry args={[width, height, 1]} />
+        <planeBufferGeometry args={[screen.width, screen.height, 1]} />
         <meshBasicMaterial color={COLORS['00']} />
       </mesh>
       <mesh position={map.position}>

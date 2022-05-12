@@ -145,7 +145,7 @@ export function Provider({ children }) {
   );
 
   const contextValue = useMemo(
-    function memoize() {
+    function factory() {
       return {
         on: {
           down(key, listener) {

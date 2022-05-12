@@ -32,6 +32,10 @@ module.exports = function config({ development }) {
             },
           },
         },
+        {
+          test: /\.(frag|vert|glsl)$/,
+          use: { loader: 'glsl-shader-loader' },
+        },
       ],
     },
     plugins: [
@@ -50,7 +54,6 @@ module.exports = function config({ development }) {
 
   if (development) {
     result.module.rules[0].use.options.plugins.push('module:react-refresh/babel');
-    result.plugins.push(new ReactRefreshWebpackPlugin());
     result.devtool = 'eval-source-map';
     result.devServer = {
       static: {
@@ -60,6 +63,12 @@ module.exports = function config({ development }) {
       historyApiFallback: true,
       hot: true,
     };
+
+    result.plugins.push(
+      new ReactRefreshWebpackPlugin({
+        include: /\.(js(x?)|frag|vert|glsl)$/i,
+      }),
+    );
   }
 
   return result;

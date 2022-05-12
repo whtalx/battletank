@@ -7,54 +7,90 @@ export const Context = createContext();
 
 Context.displayName = 'LayoutContext';
 
-function getDimensions({ width, height }) {
-  const dimensions = {};
-  const aspect = width / height;
-  dimensions.layout = aspect > 1 ? LAYOUT.HORIZONTAL : LAYOUT.VERTICAL;
+function getViewDimensions({ width, height }) {
+  return {
+    view: {
+      width,
+      height,
+      layout: width / height > 1
+        ? LAYOUT.HORIZONTAL
+        : LAYOUT.VERTICAL,
+    },
+  };
+}
 
-  if (aspect > 1) {
-    dimensions.width = height * LAYOUT.WIDTH / LAYOUT.HEIGHT;
-    dimensions.height = height;
-    dimensions.unit = height / LAYOUT.HEIGHT;
-  } else {
-    dimensions.width = width;
-    dimensions.height = width * LAYOUT.HEIGHT / LAYOUT.WIDTH;
-    dimensions.unit = width / LAYOUT.WIDTH;
+function setScreenDimensions(dimensions) {
+  switch (dimensions.view.layout) {
+    case LAYOUT.HORIZONTAL: {
+      dimensions.screen = {
+        width: dimensions.view.height * LAYOUT.WIDTH / LAYOUT.HEIGHT,
+        height: dimensions.view.height,
+        unit: dimensions.view.height / LAYOUT.HEIGHT,
+      };
+
+      break;
+    }
+
+    case LAYOUT.VERTICAL: {
+      dimensions.screen = {
+        width: dimensions.view.width,
+        height: dimensions.view.width * LAYOUT.HEIGHT / LAYOUT.WIDTH,
+        unit: dimensions.view.width / LAYOUT.WIDTH,
+      };
+
+      break;
+    }
+
+    default: {
+      dimensions.screen = {};
+      break;
+    }
   }
 
+  return dimensions;
+}
+
+function setMapDimensions(dimensions) {
   dimensions.map = {
     position: [
-      -LAYOUT.MAP_OFFSET * dimensions.unit,
+      -LAYOUT.MAP_OFFSET * dimensions.screen.unit,
       0,
       0,
     ],
-    size: LAYOUT.MAP_SIZE * dimensions.unit,
+    size: LAYOUT.MAP_SIZE * dimensions.screen.unit,
   };
+
+  return dimensions;
+}
+
+function setBlockDimensions(dimensions) {
+  const y = -LAYOUT.BLOCK_OFFSET * dimensions.screen.unit + dimensions.map.size / 2;
+  const x = -y + dimensions.map.position[0];
 
   dimensions.block = {
-    position: [
-      0,
-      -LAYOUT.BLOCK_OFFSET * dimensions.unit + dimensions.map.size / 2,
-      0,
-    ],
-    size: LAYOUT.BLOCK_SIZE * dimensions.unit,
+    position: [x, y, 0],
+    size: LAYOUT.BLOCK_SIZE * dimensions.screen.unit,
   };
-
-  dimensions.block.position[0] = -dimensions.block.position[1] + dimensions.map.position[0];
 
   return dimensions;
 }
 
 export function Provider({ children }) {
-  const size = useThree(function getSize(state) {
+  const { width, height } = useThree(function getSize(state) {
     return state.size;
   });
 
   const contextValue = useMemo(
-    function memoize() {
-      return getDimensions(size);
+    function factory() {
+      return setBlockDimensions(
+        setMapDimensions(
+          setScreenDimensions(
+            getViewDimensions({ width, height }),
+          ),
+        ),
+      );
     },
-    [size],
+    [width, height],
   );
 
   return (

@@ -1,71 +1,74 @@
 import React, { useContext } from 'react';
 
 import { Layout } from '../../contexts';
-
-import { useTexture, useTextureAnimation } from '../../hooks';
+import Brick from './Brick';
+import Steel from './Steel';
+import Tree from './Tree';
+import Water from './Water';
 
 import { BLOCK } from '../../constants';
+import { PATTERNS } from '../../data';
 
-function Brick({ position, size }) {
-  const texture = useTexture(BLOCK.BRICK);
-  return (
-    <sprite position={position} scale={[size, size, 0]}>
-      <spriteMaterial
-        map={texture}
-        sizeAttenuation
-      />
-    </sprite>
-  );
-}
+export default function Terrain({ levelMap }) {
+  const { block: { position: [x, y, z], size } } = useContext(Layout.Context);
 
-function Steel({ position, size }) {
-  const texture = useTexture(BLOCK.STEEL);
-  const [x, y, z] = position;
+  function getPosition(row, cell) {
+    return [x + size * cell, y - size * row, z];
+  }
 
-  return (
-    <sprite position={[x + size, y, z]} scale={[size, size, 0]}>
-      <spriteMaterial
-        map={texture}
-        sizeAttenuation
-      />
-    </sprite>
-  );
-}
+  function renderRow(cells, rowIndex) {
+    function renderCell({ type, pattern = 0 }, cellIndex) {
+      switch (BLOCK.TYPE[type]) {
+        case BLOCK.BRICK: {
+          return (
+            <Brick
+              key={`${rowIndex}-${cellIndex}`}
+              pattern={PATTERNS[pattern]}
+              position={getPosition(rowIndex, cellIndex)}
+              size={size}
+            />
+          );
+        }
 
-function Tree({ position, size }) {
-  const texture = useTexture(BLOCK.TREE);
-  const [x, y] = position;
+        case BLOCK.STEEL: {
+          return (
+            <Steel
+              key={`${rowIndex}-${cellIndex}`}
+              pattern={PATTERNS[pattern]}
+              position={getPosition(rowIndex, cellIndex)}
+              size={size}
+            />
+          );
+        }
 
-  return (
-    <sprite position={[x + size * 2, y, 3]} scale={[size, size, 0]}>
-      <spriteMaterial
-        map={texture}
-        sizeAttenuation
-      />
-    </sprite>
-  );
-}
+        case BLOCK.TREE: {
+          return (
+            <Tree
+              key={`${rowIndex}-${cellIndex}`}
+              position={getPosition(rowIndex, cellIndex)}
+              size={size}
+            />
+          );
+        }
 
-function Water({ position, size }) {
-  const texture = useTexture(BLOCK.WATER);
-  useTextureAnimation({ duration: 1.25, offset: 0.5, texture });
-  const [x, y, z] = position;
+        case BLOCK.WATER: {
+          return (
+            <Water
+              key={`${rowIndex}-${cellIndex}`}
+              position={getPosition(rowIndex, cellIndex)}
+              size={size}
+            />
+          );
+        }
 
-  return (
-    <sprite position={[x + size * 3, y, z]} scale={[size, size, 0]}>
-      <spriteMaterial map={texture} />
-    </sprite>
-  );
-}
+        default: {
+          return null;
+        }
+      }
+    }
 
-export default function Terrain() {
-  const { block } = useContext(Layout.Context);
-  return (
-    <>
-      <Brick {...block} />
-      <Steel {...block} />
-      <Tree {...block} />
-      <Water {...block} />
-    </>
-  );
+    return cells.map(renderCell);
+  }
+
+  return levelMap.map(renderRow);
 }
