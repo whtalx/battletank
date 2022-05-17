@@ -1,13 +1,14 @@
 import { useRef } from 'react';
 import { CanvasTexture, NearestFilter, RepeatWrapping } from 'three';
 
-import { COLORS } from '../constants';
-import { TEXTURES } from '../data';
+import { COLORS, TEXTURES } from '../data';
 
 const cache = {};
 
 export default function useTexture(name) {
   const canvas = useRef(document.createElement('canvas'));
+
+  if (!TEXTURES.hasOwnProperty(name)) return null;
 
   function renderTexture({ height, paths, width }) {
     canvas.current.width = width;

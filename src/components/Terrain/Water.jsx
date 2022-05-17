@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { useTexture, useTextureAnimation } from '../../hooks';
+import { useTextureAnimation, useTexture } from '../../hooks';
 
-import { BLOCK } from '../../constants';
+import { OBJECTS } from '../../constants';
 
 export default function Water({ position, size }) {
-  const texture = useTexture(BLOCK.WATER);
+  const texture = useTexture(OBJECTS.BLOCK.WATER);
   useTextureAnimation({ duration: 1.25, offset: 0.5, texture });
 
   return (

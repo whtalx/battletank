@@ -15,8 +15,8 @@
   ],
   "author": "whtalx",
   "scripts": {
-    "start": "webpack serve --env development --config webpack.config.js",
-    "build": "webpack --env production --config webpack.config.js"
+    "start": "webpack serve --env development",
+    "build": "webpack --env production"
   },
   "dependencies": {
     "@react-three/fiber": "^8.0.13",

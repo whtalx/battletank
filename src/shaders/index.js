@@ -1,14 +1,14 @@
 import blockFragment from './block.frag';
 import blockVertex from './block.vert';
 
-import { BLOCK } from '../constants';
+import { OBJECTS } from '../constants';
 
 export const FRAGMENT = {
-  [BLOCK.BRICK]: blockFragment,
-  [BLOCK.STEEL]: blockFragment,
+  [OBJECTS.BLOCK.BRICK]: blockFragment,
+  [OBJECTS.BLOCK.STEEL]: blockFragment,
 };
 
 export const VERTEX = {
-  [BLOCK.BRICK]: blockVertex,
-  [BLOCK.STEEL]: blockVertex,
+  [OBJECTS.BLOCK.BRICK]: blockVertex,
+  [OBJECTS.BLOCK.STEEL]: blockVertex,
 };

@@ -1,4 +1,4 @@
-import { isObject } from './isObject';
+import { isObject } from './bool';
 
 export function forEach(instance, callback) {
   if (Array.isArray(instance) || instance instanceof NodeList) {

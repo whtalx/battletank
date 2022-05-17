@@ -1,11 +1,11 @@
-import { COLORS } from './colors';
+import * as OBJECTS from './objects';
+import * as GAME from './game';
 import * as LAYOUT from './layout';
-import * as BLOCK from './block';
 import * as SETTINGS from './settings';
 
 export {
-  BLOCK,
-  COLORS,
+  GAME,
+  OBJECTS,
   LAYOUT,
   SETTINGS,
 };

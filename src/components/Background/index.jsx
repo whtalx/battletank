@@ -2,20 +2,10 @@ import React, { useContext } from 'react';
 
 import { Layout } from '../../contexts';
 
-// import { useKeyEvent } from '../../hooks';
-
-import { COLORS } from '../../constants';
-// import { KEYS } from '../../constants/settings';
+import { COLORS } from '../../data';
 
 export default function Background() {
   const { map, screen } = useContext(Layout.Context);
-
-  // useKeyEvent({
-  //   key: KEYS.START,
-  //   listener(event) {
-  //     console.log(event);
-  //   },
-  // });
 
   return (
     <>

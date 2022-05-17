@@ -2,11 +2,11 @@ import React from 'react';
 
 import { useShader, useTexture } from '../../hooks';
 
-import { BLOCK } from '../../constants';
+import { OBJECTS } from '../../constants';
 
 export default function Steel({ pattern, position, size }) {
-  const uniforms = { u_map: useTexture(BLOCK.STEEL), u_pattern: pattern };
-  const shader = useShader({ type: BLOCK.STEEL, uniforms });
+  const uniforms = { u_map: useTexture(OBJECTS.BLOCK.STEEL), u_pattern: pattern };
+  const shader = useShader({ type: OBJECTS.BLOCK.STEEL, uniforms });
 
   return (
     <mesh position={position}>

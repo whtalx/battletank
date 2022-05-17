@@ -11,7 +11,7 @@ int getPatternValue(vec2 uv) {
 }
 
 void main() {
-  if (getPatternValue(v_uv) == 1) {
-    gl_FragColor = texture2D(u_map, v_uv * 2.);
-  }
+  if (getPatternValue(v_uv) != 1) discard;
+
+  gl_FragColor = texture2D(u_map, v_uv * 2.);
 }

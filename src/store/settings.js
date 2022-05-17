@@ -6,7 +6,7 @@ import { SETTINGS } from '../constants';
 
 export default function settings(set) {
   return {
-    ...getFromLocalStorage({ settings: SETTINGS.DEFAULT }),
+    ...getFromLocalStorage({ settings: SETTINGS.DEFAULT }).settings,
     saveSettings(state) {
       return set(produce(state));
     },
