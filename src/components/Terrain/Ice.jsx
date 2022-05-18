@@ -5,17 +5,16 @@ import { areEqual } from '../../utils';
 
 import { OBJECTS } from '../../constants';
 
-function Tree({ position, size }) {
-  const uniforms = { u_map: useTexture(OBJECTS.BLOCK.TREE) };
+function Ice({ position, size }) {
+  const uniforms = { u_map: useTexture(OBJECTS.BLOCK.ICE) };
   const shader = useShader({ uniforms });
-  const [x, y] = position;
 
   return (
-    <mesh position={[x, y, 3]}>
+    <mesh position={position}>
       <planeBufferGeometry args={[size, size, 1]} />
       <shaderMaterial args={[shader]} />
     </mesh>
   );
 }
 
-export default memo(Tree, areEqual);
+export default memo(Ice, areEqual);

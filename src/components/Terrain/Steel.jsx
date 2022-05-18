@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 
 import { useShader, useTexture } from '../../hooks';
+import { areEqual } from '../../utils';
 
-import { OBJECTS } from '../../constants';
+import { OBJECTS, SHADER } from '../../constants';
 
-export default function Steel({ pattern, position, size }) {
-  const uniforms = { u_map: useTexture(OBJECTS.BLOCK.STEEL), u_pattern: pattern };
-  const shader = useShader({ type: OBJECTS.BLOCK.STEEL, uniforms });
+function Steel({ pattern, position, size }) {
+  const shader = useRef(
+    useShader({
+      fragment: SHADER.DESTRUCTIBLE,
+      uniforms: {
+        u_map: useTexture(OBJECTS.BLOCK.STEEL),
+        u_pattern: pattern,
+      },
+    }),
+  );
+
+  useEffect(
+    function effect() {
+      shader.current.uniforms.u_pattern.value = pattern;
+    },
+    [pattern],
+  );
 
   return (
     <mesh position={position}>
       <planeBufferGeometry args={[size, size, 1]} />
-      <shaderMaterial args={[shader]} />
+      <shaderMaterial args={[shader.current]} />
     </mesh>
   );
 }
+
+export default memo(Steel, areEqual);

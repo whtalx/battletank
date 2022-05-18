@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { CanvasTexture, NearestFilter, RepeatWrapping } from 'three';
+import { CanvasTexture, NearestFilter } from 'three';
 
 import { COLORS, TEXTURES } from '../data';
 
@@ -49,8 +49,6 @@ export default function useTexture(name) {
     const texture = new CanvasTexture(canvas.current);
     texture.magFilter = NearestFilter;
     texture.minFilter = NearestFilter;
-    texture.wrapS = RepeatWrapping;
-    texture.wrapT = RepeatWrapping;
     cache[name] = texture;
   }
 

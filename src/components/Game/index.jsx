@@ -52,6 +52,15 @@ export default function Game() {
     },
   });
 
+  useKeyEvent({
+    key: SETTINGS.KEYS.START,
+    listener() {
+      setGame(function toggleDefeated(state) {
+        state.game.defeated = !state.game.defeated;
+      });
+    },
+  });
+
   switch (game.status) {
     case GAME.STATUS.WAITING: {
       return (

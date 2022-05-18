@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import { useTexture } from '../../hooks';
 import { useStore } from '../../store';
+import { areEqual } from '../../utils';
 
 import { OBJECTS } from '../../constants';
 
@@ -11,7 +12,7 @@ function selector({ game: { defeated } }) {
   };
 }
 
-export default function Base({ position, size }) {
+function Base({ position, size }) {
   const { name } = useStore(selector);
   const texture = useTexture(name);
   return (
@@ -21,3 +22,5 @@ export default function Base({ position, size }) {
     </mesh>
   );
 }
+
+export default memo(Base, areEqual);

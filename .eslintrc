@@ -20,6 +20,7 @@
         "ImportDeclaration": { "consistent": true, "multiline": true },
         "ExportDeclaration": { "consistent": true, "multiline": true }
     }],
+    "operator-linebreak": ["error", "after"],
     "prefer-arrow-callback": "off",
     "quote-props": ["error", "as-needed", { "numbers": true }],
     "import/prefer-default-export": "off",

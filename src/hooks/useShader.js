@@ -3,8 +3,9 @@ import { useMemo } from 'react';
 import { reduce } from '../utils';
 
 import { FRAGMENT, VERTEX } from '../shaders';
+import { SHADER } from '../constants';
 
-export default function useShader({ type, uniforms }) {
+export default function useShader({ fragment, uniforms, vertex }) {
   const shader = useMemo(
     function factory() {
       function reduceUniforms(result, value, key) {
@@ -13,12 +14,13 @@ export default function useShader({ type, uniforms }) {
       }
 
       return {
-        fragmentShader: FRAGMENT[type],
-        vertexShader: VERTEX[type],
+        fragmentShader: FRAGMENT[fragment] || FRAGMENT[SHADER.CONSTANT],
+        vertexShader: VERTEX[vertex] || VERTEX[SHADER.CONSTANT],
         uniforms: reduce(uniforms, {}, reduceUniforms),
       };
     },
-    [type, uniforms],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fragment, vertex],
   );
 
   return shader;

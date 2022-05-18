@@ -1,14 +1,18 @@
-import blockFragment from './block.frag';
-import blockVertex from './block.vert';
+import animatedFragment from './animated.frag';
+import destructibleFragment from './destructible.frag';
+import constantVertex from './constant.vert';
+import animatedVertex from './animated.vert';
+import constantFragment from './constant.frag';
 
-import { OBJECTS } from '../constants';
+import { SHADER } from '../constants';
 
 export const FRAGMENT = {
-  [OBJECTS.BLOCK.BRICK]: blockFragment,
-  [OBJECTS.BLOCK.STEEL]: blockFragment,
+  [SHADER.DESTRUCTIBLE]: destructibleFragment,
+  [SHADER.CONSTANT]: constantFragment,
+  [SHADER.ANIMATED]: animatedFragment,
 };
 
 export const VERTEX = {
-  [OBJECTS.BLOCK.BRICK]: blockVertex,
-  [OBJECTS.BLOCK.STEEL]: blockVertex,
+  [SHADER.CONSTANT]: constantVertex,
+  [SHADER.ANIMATED]: animatedVertex,
 };

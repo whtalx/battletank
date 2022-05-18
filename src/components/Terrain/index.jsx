@@ -1,24 +1,27 @@
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 
 import { Layout } from '../../contexts';
 import Brick from './Brick';
 import Base from './Base';
+import Ice from './Ice';
 import Steel from './Steel';
 import Tree from './Tree';
 import Water from './Water';
 
+import { areEqual } from '../../utils';
+
 import { PATTERNS } from '../../data';
 
-export const BLOCK_TYPE = [
+const BLOCK = [
   null,
   Brick,
   Steel,
   Tree,
-  null,
+  Ice,
   Water,
 ];
 
-export default function Terrain({ levelMap }) {
+function Terrain({ levelMap }) {
   const { block: { position: [x, y, z], size } } = useContext(Layout.Context);
 
   function getPosition(row, cell) {
@@ -40,10 +43,15 @@ export default function Terrain({ levelMap }) {
         );
       }
 
-      const Block = BLOCK_TYPE[type];
+      const Block = BLOCK[type];
 
       return Block && (
-        <Block key={key} pattern={PATTERNS[pattern]} position={position} size={size} />
+        <Block
+          key={key}
+          pattern={PATTERNS[pattern]}
+          position={position}
+          size={size}
+        />
       );
     }
 
@@ -52,3 +60,5 @@ export default function Terrain({ levelMap }) {
 
   return levelMap.map(renderRow);
 }
+
+export default memo(Terrain, areEqual);

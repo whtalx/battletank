@@ -46,3 +46,28 @@ export function reduce(instance, initialState, callback) {
 
   return result;
 }
+
+export function areEqual(...comparers) {
+  function compare(x, y) {
+    if (typeof x !== typeof y) return false;
+
+    if (
+      (Array.isArray(x) && Array.isArray(y)) ||
+      (isObject(x) && isObject(y))
+    ) {
+      return areEqual(x, y);
+    }
+
+    return x === y;
+  }
+
+  function callback(allEqual, value, key) {
+    function compareCurrent(currentEqual, comparer) {
+      return currentEqual && compare(comparer[key], value);
+    }
+
+    return allEqual && reduce(comparers.slice(1), allEqual, compareCurrent);
+  }
+
+  return reduce(comparers[0], true, callback);
+}
