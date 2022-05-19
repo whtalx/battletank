@@ -9,10 +9,10 @@ export default function game(set) {
   return {
     status: GAME.STATUS.RUNNING,
     defeated: false,
-    enemies: ENEMIES[2],
-    level: 2,
+    enemies: ENEMIES[3],
+    level: 3,
     lives: 3,
-    map: MAPS[2],
+    map: MAPS[3],
     ...getFromLocalStorage({ hiScore: 20000 }),
 
     setGame(state) {

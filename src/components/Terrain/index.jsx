@@ -33,7 +33,7 @@ function Terrain({ levelMap }) {
   }
 
   function renderRow(cells, rowIndex) {
-    function renderCell({ type, pattern = 0 }, cellIndex, map) {
+    function renderCell([type = 0, pattern = 0], cellIndex, map) {
       const key = `${rowIndex}^${cellIndex}`;
       const position = getPosition(rowIndex, cellIndex);
 
