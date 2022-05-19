@@ -7,8 +7,7 @@ export const BLOCK = {
   WATER: 'water',
 };
 
-export const BLAZON = 'blazon';
-export const FLAG = 'flag';
+export const BASE = 'base';
 export const LEVEL = 'level';
 export const LIVES = 'lives';
 export const UNIT = 'unit';

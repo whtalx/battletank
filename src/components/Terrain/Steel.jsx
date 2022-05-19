@@ -10,6 +10,7 @@ function Steel({ pattern, position, size }) {
     useShader({
       fragment: SHADER.DESTRUCTIBLE,
       uniforms: {
+        u_area: [0.5, 0.5],
         u_map: useTexture(OBJECTS.BLOCK.STEEL),
         u_pattern: pattern,
       },

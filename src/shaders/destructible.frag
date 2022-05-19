@@ -1,4 +1,5 @@
 varying vec2 v_uv;
+uniform vec2 u_area;
 uniform sampler2D u_map;
 uniform mat4 u_pattern;
 
@@ -13,7 +14,7 @@ float getPatternValue(vec2 uv) {
 void main() {
   if (getPatternValue(v_uv) != 1.) discard;
 
-  vec4 texel = texture2D(u_map, mod(v_uv, .5) * 2.);
+  vec4 texel = texture2D(u_map, mod(v_uv, u_area) / u_area);
 
   if (texel.a == 0.) discard;
 

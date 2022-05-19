@@ -1,5 +1,4 @@
 import React, { memo, useRef } from 'react';
-import { Vector2 } from 'three';
 
 import { useShader, useTexture, useTextureAnimation } from '../../hooks';
 import { areEqual } from '../../utils';
@@ -12,16 +11,17 @@ function Water({ position, size }) {
       fragment: SHADER.ANIMATED,
       vertex: SHADER.ANIMATED,
       uniforms: {
+        u_area: [0.5, 0.5],
         u_map: useTexture(OBJECTS.BLOCK.WATER),
-        u_offset: new Vector2(0, 0),
-        u_scale: new Vector2(0.5, 1),
+        u_offset: [0, 0],
+        u_scale: [0.5, 1],
       },
     }),
   );
 
   useTextureAnimation({
     callback(offset) {
-      shader.current.uniforms.u_offset.value.setX(offset);
+      shader.current.uniforms.u_offset.value[0] = offset;
     },
     duration: 1.25,
     offset: 0.5,
