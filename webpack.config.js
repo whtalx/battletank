@@ -28,6 +28,7 @@ module.exports = function config({ development }) {
               ],
               plugins: [
                 'module:@react-three/babel',
+                '@babel/plugin-syntax-dynamic-import',
               ],
             },
           },
@@ -39,11 +40,13 @@ module.exports = function config({ development }) {
       ],
     },
     plugins: [
-      new HtmlWebpackPlugin({ template: path.resolve(__dirname, './src/index.html') }),
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, './src/index.html'),
+      }),
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: path.resolve(__dirname, './assets'),
+            from: path.resolve(__dirname, './src/assets'),
             to: '.',
           },
         ],
