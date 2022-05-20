@@ -3,6 +3,7 @@ import LEVEL_2 from './2.json';
 import LEVEL_3 from './3.json';
 import LEVEL_4 from './4.json';
 import LEVEL_5 from './5.json';
+import LEVEL_6 from './6.json';
 
 const MAPS = [
   LEVEL_1,
@@ -10,6 +11,7 @@ const MAPS = [
   LEVEL_3,
   LEVEL_4,
   LEVEL_5,
+  LEVEL_6,
 ];
 
 export default MAPS;
