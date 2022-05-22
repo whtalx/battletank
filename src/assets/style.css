@@ -14,11 +14,19 @@ body {
   top: 0;
 }
 
+#canvas:not(.loaded) {
+  display: none;
+}
+
 #terminal {
   padding: 10px;
   display: block;
   color: #AAA;
   font-family: Terminal, Courier, monospace;
+}
+
+#canvas.loaded + #terminal {
+  display: none;
 }
 
 .underline {

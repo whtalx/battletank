@@ -1,7 +1,7 @@
 import { isObject } from './bool';
 
 export function forEach(instance, callback) {
-  if (Array.isArray(instance) || instance instanceof NodeList) {
+  if (Array.isArray(instance) || (typeof NodeList !== 'undefined' && instance instanceof NodeList)) {
     for (let index = 0; index < instance.length; index += 1) {
       callback(instance[index], index);
     }
@@ -29,7 +29,7 @@ export function reduce(instance, initialState, callback) {
 
   let result = initialState;
 
-  if (Array.isArray(instance) || instance instanceof NodeList) {
+  if (Array.isArray(instance) || (typeof NodeList !== 'undefined' && instance instanceof NodeList)) {
     for (let index = 0; index < instance.length; index += 1) {
       result = callback(result, instance[index], index);
     }

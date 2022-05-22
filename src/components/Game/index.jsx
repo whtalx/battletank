@@ -1,33 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
 import Background from '../Background';
 import Terrain from '../Terrain';
 import Text from '../Text';
 
-import { changeLevel, decrement, increment } from '../../utils';
-import { useKeyEvent } from '../../hooks';
-import { useStore } from '../../store';
+import { decrement, increment } from '../../utils';
+import { useKeyEvent, useStore } from '../../hooks';
+import { postMessage } from '../../workers';
 import { Layout } from '../../contexts';
 
-import { GAME, SETTINGS } from '../../constants';
+import { GAME, MESSAGES, SETTINGS } from '../../constants';
 import { COLORS } from '../../data';
 
 function selector({ game: { setGame, ...rest } }) {
-  return {
-    game: rest,
-    setGame,
-  };
+  return { game: rest };
 }
 
 export default function Game() {
   const { screen, view } = useContext(Layout.Context);
-  const { game, setGame } = useStore(selector);
-
-  function setLevel(updater) {
-    return function updateLevel(state) {
-      state.game = { ...game, ...changeLevel(updater(state.game.level)) };
-    };
-  }
+  const { game } = useStore(selector);
+  const gameRef = useRef(game);
 
   function getStage(level) {
     const stage = level + 1;
@@ -37,25 +29,35 @@ export default function Game() {
   useKeyEvent({
     key: SETTINGS.KEYS.UP,
     listener() {
-      setGame(setLevel(increment));
+      postMessage({ type: MESSAGES.SET_LEVEL, payload: increment(gameRef.current.level) });
     },
   });
 
   useKeyEvent({
     key: SETTINGS.KEYS.DOWN,
     listener() {
-      setGame(setLevel(decrement));
+      postMessage({ type: MESSAGES.SET_LEVEL, payload: decrement(gameRef.current.level) });
     },
   });
 
   useKeyEvent({
     key: SETTINGS.KEYS.START,
     listener() {
-      setGame(function toggleDefeated(state) {
-        state.game.defeated = !state.game.defeated;
+      postMessage({
+        type: MESSAGES.SET_STATE,
+        payload: gameRef.current.status === GAME.STATUS.WAITING
+          ? GAME.STATUS.RUNNING
+          : GAME.STATUS.WAITING,
       });
     },
   });
+
+  useEffect(
+    function effect() {
+      gameRef.current = game;
+    },
+    [game],
+  );
 
   switch (game.status) {
     case GAME.STATUS.WAITING: {

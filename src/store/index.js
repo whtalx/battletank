@@ -1,9 +1,9 @@
-import create from 'zustand';
+import create from 'zustand/vanilla';
 
 import game from './game';
 import settings from './settings';
 
-export const useStore = create(function mutator(set) {
+export const store = create(function mutator(set) {
   return {
     game: game(set),
     settings: settings(set),

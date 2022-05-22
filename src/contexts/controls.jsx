@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useMemo, useRef } from 'react';
 
-import { forEach, reduce } from '../utils';
-import { useStore } from '../store';
+import { forEach, reduce } from '../utils/iterable';
+import useStore from '../hooks/useStore';
 
 import { KEYS } from '../constants/settings';
 

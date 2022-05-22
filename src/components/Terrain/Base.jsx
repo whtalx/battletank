@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useRef } from 'react';
 
-import { useShader, useTexture } from '../../hooks';
-import { useStore } from '../../store';
+import { useShader, useStore, useTexture } from '../../hooks';
 import { areEqual } from '../../utils';
 
 import { OBJECTS, SHADER } from '../../constants';

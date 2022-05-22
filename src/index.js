@@ -1,8 +1,7 @@
 function init({ render }) {
   const canvas = document.createElement('canvas');
   canvas.id = 'canvas';
-  document.getElementById('loader').remove();
-  document.body.appendChild(canvas);
+  document.body.prepend(canvas);
   render(canvas);
 }
 
