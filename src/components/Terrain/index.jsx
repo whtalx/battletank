@@ -10,8 +10,6 @@ import Water from './Water';
 
 import { areEqual } from '../../utils';
 
-import { PATTERNS } from '../../data';
-
 const BLOCK = [
   null,
   Brick,
@@ -33,7 +31,7 @@ function Terrain({ levelMap }) {
   }
 
   function renderRow(cells, rowIndex) {
-    function renderCell([type = 0, pattern = 0], cellIndex, map) {
+    function renderCell({ type, pattern }, cellIndex, map) {
       const key = `${rowIndex}^${cellIndex}`;
       const position = getPosition(rowIndex, cellIndex);
 
@@ -46,12 +44,7 @@ function Terrain({ levelMap }) {
       const Block = BLOCK[type];
 
       return Block && (
-        <Block
-          key={key}
-          pattern={PATTERNS[pattern]}
-          position={position}
-          size={size}
-        />
+        <Block key={key} pattern={pattern} position={position} size={size} />
       );
     }
 

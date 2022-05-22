@@ -4,12 +4,13 @@ import Background from '../Background';
 import Terrain from '../Terrain';
 import Text from '../Text';
 
-import { useStore } from '../../store';
+import { changeLevel, decrement, increment } from '../../utils';
 import { useKeyEvent } from '../../hooks';
+import { useStore } from '../../store';
+import { Layout } from '../../contexts';
 
 import { GAME, SETTINGS } from '../../constants';
-import { COLORS, MAPS } from '../../data';
-import { Layout } from '../../contexts';
+import { COLORS } from '../../data';
 
 function selector({ game: { setGame, ...rest } }) {
   return {
@@ -22,10 +23,9 @@ export default function Game() {
   const { screen, view } = useContext(Layout.Context);
   const { game, setGame } = useStore(selector);
 
-  function setStage(updater) {
+  function setLevel(updater) {
     return function updateLevel(state) {
-      const newLevel = updater(state.game.level);
-      state.game.level = newLevel >= 0 ? newLevel % 70 : 69;
+      state.game = { ...game, ...changeLevel(updater(state.game.level)) };
     };
   }
 
@@ -37,18 +37,14 @@ export default function Game() {
   useKeyEvent({
     key: SETTINGS.KEYS.UP,
     listener() {
-      setGame(setStage(function increment(x) {
-        return x + 1;
-      }));
+      setGame(setLevel(increment));
     },
   });
 
   useKeyEvent({
     key: SETTINGS.KEYS.DOWN,
     listener() {
-      setGame(setStage(function decrement(x) {
-        return x - 1;
-      }));
+      setGame(setLevel(decrement));
     },
   });
 
@@ -78,11 +74,12 @@ export default function Game() {
         </>
       );
     }
+
     case GAME.STATUS.RUNNING: {
       return (
         <>
           <Background />
-          <Terrain levelMap={MAPS[game.level]} />
+          <Terrain levelMap={game.map} />
         </>
       );
     }

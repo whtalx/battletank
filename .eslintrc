@@ -2,7 +2,7 @@
   "extends": ["airbnb", "react-app"],
   "parser": "@babel/eslint-parser",
   "rules": {
-    "import/no-anonymous-default-export": ["error", {"allowObject": true}],
+    "import/no-anonymous-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     "no-else-return": "off",
     "no-empty": ["error", { "allowEmptyCatch": true }],
@@ -20,7 +20,7 @@
         "ImportDeclaration": { "consistent": true, "multiline": true },
         "ExportDeclaration": { "consistent": true, "multiline": true }
     }],
-    "operator-linebreak": ["error", "after"],
+    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
     "prefer-arrow-callback": "off",
     "quote-props": ["error", "as-needed", { "numbers": true }],
     "import/prefer-default-export": "off",

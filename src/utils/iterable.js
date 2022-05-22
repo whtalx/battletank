@@ -49,16 +49,19 @@ export function reduce(instance, initialState, callback) {
 
 export function areEqual(...comparers) {
   function compare(x, y) {
-    if (typeof x !== typeof y) return false;
-
-    if (
-      (Array.isArray(x) && Array.isArray(y)) ||
-      (isObject(x) && isObject(y))
-    ) {
-      return areEqual(x, y);
+    if (typeof x !== typeof y) {
+      return false;
+    } else if (Array.isArray(x) && Array.isArray(y)) {
+      return x.length === y.length
+        ? areEqual(x, y)
+        : false;
+    } else if (isObject(x) && isObject(y)) {
+      return Object.keys(x).length === Object.keys(y).length
+        ? areEqual(x, y)
+        : false;
+    } else {
+      return x === y;
     }
-
-    return x === y;
   }
 
   function callback(allEqual, value, key) {
