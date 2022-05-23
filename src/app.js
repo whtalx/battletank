@@ -18,7 +18,7 @@ export function render(canvas) {
   const camera = new OrthographicCamera(0, 0, 0, 0, 1, 100);
   camera.position.z = 100;
   const root = createRoot(canvas);
-  root.configure({ camera, events, gl: { alpha: true, antialias: false }, size: getSize() });
+  root.configure({ camera, events, gl: { alpha: false, antialias: false }, size: getSize() });
   root.render(createElement(App));
 
   window.addEventListener('resize', function handleResize() {

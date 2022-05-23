@@ -1,57 +1,40 @@
-import { Shape } from 'three';
-import { generateUUID } from 'three/src/math/MathUtils';
+import { Path, Shape } from 'three';
 
 import { FONT } from '../data';
 
 const cache = {};
 
-const EMPTY_SHAPE = {
-  arcLengthDivisions: 200,
-  type: 'Shape',
-  autoClose: false,
-  currentPoint: [0, 0],
-};
+function renderCharacter(shape, vertices, index) {
+  function renderVertices(path) {
+    let line = false;
 
-const EMPTY_CURVE = {
-  arcLengthDivisions: 200,
-  type: 'LineCurve',
-};
+    vertices.forEach(function addVertex(vertex) {
+      if (!vertex.length) {
+        line = false;
+      } else if (line) {
+        path.lineTo(...vertex);
+      } else {
+        path.moveTo(...vertex);
+        line = true;
+      }
+    });
 
-function makeShape(path) {
-  function makeCurve(result, points, index) {
-    if (points.length && path[index - 1]?.length) {
-      result.curves.push({ ...EMPTY_CURVE, v1: path[index - 1], v2: points });
-    } else if (points.length) {
-      result.currentPoint = points;
-    }
-
-    return result;
+    return path;
   }
 
-  return {
-    ...EMPTY_SHAPE,
-    ...path.reduce(makeCurve, { curves: [] }),
-  };
+  if (index) {
+    shape.holes.push(renderVertices(new Path()));
+    return shape;
+  } else {
+    return renderVertices(shape);
+  }
 }
 
-function reducePaths(shape, path, index) {
-  return index
-    ? {
-      ...shape,
-      holes: [...shape.holes, makeShape(path)],
-    }
-    : {
-      ...makeShape(path),
-      holes: [],
-      uuid: generateUUID(),
-    };
-}
-
-export function getFontShape(character) {
+export function getCharacterShape(character) {
   if (!FONT.hasOwnProperty(character)) return null;
 
   if (!cache.hasOwnProperty(character)) {
-    cache[character] = new Shape().fromJSON(FONT[character].reduce(reducePaths, {}));
+    cache[character] = FONT[character].reduce(renderCharacter, new Shape());
   }
 
   return cache[character];
@@ -73,4 +56,12 @@ export function getCharacterSize(character) {
       return [16, 16];
     }
   }
+}
+
+export function getCharacterScale({ characterSize: [width, height], fontSize, unit }) {
+  return [
+    ((fontSize * width / height) / width) * unit,
+    (fontSize / height) * unit,
+    0,
+  ];
 }

@@ -1,39 +1,42 @@
 import React from 'react';
 
-import { getCharacterSize, getFontShape } from '../../utils';
-
-import { COLORS } from '../../data';
+import { getCharacterScale, getCharacterShape, getCharacterSize } from '../../utils';
 
 function getProps({
   center = false,
-  color = COLORS['0D'],
+  color = null,
   lineHeight = 1.125,
   position = [0, 0, 0],
-  size = 8,
+  fontSize = 8,
   text = '',
   texture = null,
   unit = 1,
 }) {
-  const height = -size * unit * lineHeight;
+  const height = fontSize * unit * lineHeight;
 
   function renderLine(props, line, lineIndex, lines) {
     function renderCharacter(result, character, characterIndex) {
       if (!character) return result;
 
-      const shape = getFontShape(character);
+      const shape = getCharacterShape(character);
       const characterSize = getCharacterSize(character);
-      const positionX = result.width;
-      const scale = [
-        ((size * characterSize[0] / characterSize[1]) / characterSize[0]) * unit,
-        (size / characterSize[1]) * unit,
-      ];
+      const characterPosition = [result.width, 0, 0];
+      const characterScale = getCharacterScale({
+        characterSize,
+        fontSize,
+        unit,
+      });
 
-      result.width += scale[0] * characterSize[0];
+      result.width += characterScale[0] * characterSize[0];
 
       if (shape) {
         result.characters.push(
-          <mesh key={`c-${characterIndex}`} position={[positionX, 0, 0]} scale={scale}>
-            <shapeBufferGeometry args={[shape]} />
+          <mesh
+            key={`c-${characterIndex}`}
+            position={characterPosition}
+            scale={characterScale}
+          >
+            <shapeGeometry args={[shape]} />
             <meshBasicMaterial color={color} map={texture} />
           </mesh>,
         );
@@ -42,32 +45,41 @@ function getProps({
       return result;
     }
 
-    const { characters, width } = line.split('').reduce(renderCharacter, { characters: [], width: 0 });
-    const x = center ? -width / 2 : 0;
-    const y = lineIndex * height;
+    const { characters, width } = line
+      .split('')
+      .reduce(renderCharacter, { characters: [], width: 0 });
+
+    const linePosition = [
+      center ? -width / 2 : 0,
+      -lineIndex * height,
+      0,
+    ];
 
     props.children.push(
-      <group key={`l-${lineIndex}`} position={[x, y, 0]}>
+      <group key={`l-${lineIndex}`} position={linePosition}>
         {characters}
       </group>,
     );
 
     if (!center) {
-      props.maximum = Math.max(props.maximum, width);
+      props.width = Math.max(props.width, width);
     }
 
     if (lineIndex === lines.length - 1) {
       if (!center) {
-        props.position[0] -= props.maximum / 2;
+        props.position[0] -= props.width / 2;
       }
 
-      props.position[1] -= (height * lines.length) / 2;
+      props.height = lineIndex * height - fontSize * unit;
+      props.position[1] += props.height / 2;
     }
 
     return props;
   }
 
-  return text.split('\\n').reduce(renderLine, { children: [], maximum: 0, position });
+  return text
+    .split('\n')
+    .reduce(renderLine, { children: [], width: 0, height: 0, position });
 }
 
 export default function Text(props) {

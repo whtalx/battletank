@@ -4,8 +4,8 @@ import Background from '../Background';
 import Terrain from '../Terrain';
 import Text from '../Text';
 
-import { decrement, increment } from '../../utils';
 import { useKeyEvent, useStore } from '../../hooks';
+import { decrement, increment } from '../../utils';
 import { postMessage } from '../../workers';
 import { Layout } from '../../contexts';
 
@@ -69,7 +69,6 @@ export default function Game() {
           </mesh>
           <Text
             color={COLORS['0D']}
-            size={8}
             text={`STAGE ${getStage(game.level)}`}
             unit={screen.unit}
           />
