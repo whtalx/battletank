@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useMemo, useRef } from 'react';
+import React, { createContext, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { forEach, reduce } from '../utils/iterable';
 import useStore from '../hooks/useStore';
@@ -30,6 +30,47 @@ function getInitialListeners() {
   return reduce(KEYS, {}, reduceKeys);
 }
 
+function getLastPressed({ key, keyPressed }) {
+  function reduceKeys(result, times, keyName) {
+    function getLatest(latest, time, code) {
+      return latest && times[latest] > time ? latest : code;
+    }
+
+    switch (keyName) {
+      case KEYS.DOWN:
+      case KEYS.LEFT:
+      case KEYS.RIGHT:
+      case KEYS.UP: {
+        const latest = reduce(times, undefined, getLatest);
+
+        if (!result.key || result.time < times[latest]) {
+          result.key = keyName;
+          result.time = times[latest];
+        }
+
+        return result;
+      }
+
+      default: {
+        return result;
+      }
+    }
+  }
+
+  switch (key) {
+    case KEYS.DOWN:
+    case KEYS.LEFT:
+    case KEYS.RIGHT:
+    case KEYS.UP: {
+      return reduce(keyPressed.current, {}, reduceKeys).key;
+    }
+
+    default: {
+      return undefined;
+    }
+  }
+}
+
 export function Provider({ children }) {
   const { bindings } = useStore(selector);
   const keyPressed = useRef({});
@@ -43,6 +84,45 @@ export function Provider({ children }) {
     forEach(listeners.current[key][type], fire);
   }
 
+  const down = useCallback(
+    function onDown({ event, key, keyCode }) {
+      if (key && !keyPressed.current[key]?.hasOwnProperty(keyCode)) {
+        const alreadyPressed = !!Object.values(keyPressed.current[key] || {}).length;
+
+        keyPressed.current[key] = {
+          ...keyPressed.current[key],
+          [keyCode]: Date.now(),
+        };
+
+        if (!alreadyPressed) fireEvents({ event, key, type: 'down' });
+      }
+    },
+    [],
+  );
+
+  const up = useCallback(
+    function onUp({ event, key, keyCode }) {
+      if (key && keyPressed.current[key]?.hasOwnProperty(keyCode)) {
+        const { [keyCode]: time, ...rest } = keyPressed.current[key];
+
+        if (Object.values(rest).length) {
+          keyPressed.current[key] = rest;
+        } else {
+          delete keyPressed.current[key];
+
+          const lastPressed = getLastPressed({ key, keyPressed: keyPressed.current });
+
+          if (lastPressed) {
+            fireEvents({ event, key: lastPressed, type: 'down' });
+          } else {
+            fireEvents({ event, key, type: 'up' });
+          }
+        }
+      }
+    },
+    [],
+  );
+
   useEffect(
     function effect() {
       function getKeyByCode(keyCode) {
@@ -53,84 +133,16 @@ export function Provider({ children }) {
         return reduce(bindings, undefined, reduceKeyBindings);
       }
 
-      function getLastPressed(key) {
-        function reduceKeys(result, times, keyName) {
-          function getLatest(latest, time, code) {
-            return latest && times[latest] > time ? latest : code;
-          }
-
-          switch (keyName) {
-            case KEYS.DOWN:
-            case KEYS.LEFT:
-            case KEYS.RIGHT:
-            case KEYS.UP: {
-              const latest = reduce(times, undefined, getLatest);
-
-              if (!result.key || result.time < times[latest]) {
-                result.key = keyName;
-                result.time = times[latest];
-              }
-
-              return result;
-            }
-
-            default: {
-              return result;
-            }
-          }
-        }
-
-        switch (key) {
-          case KEYS.DOWN:
-          case KEYS.LEFT:
-          case KEYS.RIGHT:
-          case KEYS.UP: {
-            return reduce(keyPressed.current, {}, reduceKeys).key;
-          }
-
-          default: {
-            return undefined;
-          }
-        }
-      }
-
       function onKeyDown(event) {
         const { keyCode } = event;
         const key = getKeyByCode(keyCode);
-
-        if (key && !keyPressed.current[key]?.hasOwnProperty(keyCode)) {
-          const alreadyPressed = !!Object.values(keyPressed.current[key] || {}).length;
-
-          keyPressed.current[key] = {
-            ...keyPressed.current[key],
-            [keyCode]: Date.now(),
-          };
-
-          if (!alreadyPressed) fireEvents({ event, key, type: 'down' });
-        }
+        down({ event, key, keyCode });
       }
 
       function onKeyUp(event) {
         const { keyCode } = event;
         const key = getKeyByCode(keyCode);
-
-        if (key && keyPressed.current[key]?.hasOwnProperty(keyCode)) {
-          const { [keyCode]: time, ...rest } = keyPressed.current[key];
-
-          if (Object.values(rest).length) {
-            keyPressed.current[key] = rest;
-          } else {
-            delete keyPressed.current[key];
-
-            const lastPressed = getLastPressed(key);
-
-            if (lastPressed) {
-              fireEvents({ event, key: lastPressed, type: 'down' });
-            } else {
-              fireEvents({ event, key, type: 'up' });
-            }
-          }
-        }
+        up({ event, key, keyCode });
       }
 
       window.addEventListener('keydown', onKeyDown);
@@ -141,12 +153,14 @@ export function Provider({ children }) {
         window.removeEventListener('keyup', onKeyUp);
       };
     },
-    [bindings],
+    [bindings, down, up],
   );
 
   const contextValue = useMemo(
     function factory() {
       return {
+        up,
+        down,
         on: {
           down(key, listener) {
             listeners.current[key].down.add(listener);
@@ -165,7 +179,7 @@ export function Provider({ children }) {
         },
       };
     },
-    [],
+    [down, up],
   );
 
   return (

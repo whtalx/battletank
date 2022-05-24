@@ -14,6 +14,7 @@ export function render(canvas) {
     return { width: window.innerWidth, height: window.innerHeight };
   }
 
+  canvas.addEventListener('dblclick', preventDefault());
   canvas.addEventListener('contextmenu', preventDefault());
   const camera = new OrthographicCamera(0, 0, 0, 0, 1, 100);
   camera.position.z = 100;

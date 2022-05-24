@@ -1,5 +1,6 @@
 import animatedFragment from './animated.frag';
-import destructibleFragment from './destructible.frag';
+import animatedPatternFragment from './animatedPattern.frag';
+import patternFragment from './pattern.frag';
 import constantVertex from './constant.vert';
 import animatedVertex from './animated.vert';
 import constantFragment from './constant.frag';
@@ -7,9 +8,10 @@ import constantFragment from './constant.frag';
 import { SHADER } from '../constants';
 
 export const FRAGMENT = {
-  [SHADER.DESTRUCTIBLE]: destructibleFragment,
-  [SHADER.CONSTANT]: constantFragment,
   [SHADER.ANIMATED]: animatedFragment,
+  [SHADER.ANIMATED_PATTERN]: animatedPatternFragment,
+  [SHADER.CONSTANT]: constantFragment,
+  [SHADER.PATTERN]: patternFragment,
 };
 
 export const VERTEX = {

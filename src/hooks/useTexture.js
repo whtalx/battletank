@@ -10,17 +10,21 @@ export default function useTexture(name) {
 
   if (!TEXTURES.hasOwnProperty(name)) return null;
 
+  function scale(x) {
+    return x * devicePixelRatio;
+  }
+
   function renderTexture({ height, paths, width }) {
-    canvas.current.width = width;
-    canvas.current.height = height;
+    canvas.current.width = scale(width);
+    canvas.current.height = scale(height);
     const ctx = canvas.current.getContext('2d');
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, scale(width), scale(height));
 
     function renderPoint([x, y], index) {
       if (index) {
-        ctx.lineTo(x, y);
+        ctx.lineTo(scale(x), scale(y));
       } else {
-        ctx.moveTo(x, y);
+        ctx.moveTo(scale(x), scale(y));
       }
     }
 
@@ -47,6 +51,7 @@ export default function useTexture(name) {
   if (!cache.hasOwnProperty(name)) {
     renderTexture(TEXTURES[name]);
     const texture = new CanvasTexture(canvas.current);
+    texture.repeat.set(devicePixelRatio, devicePixelRatio);
     texture.magFilter = NearestFilter;
     texture.minFilter = NearestFilter;
     cache[name] = texture;
