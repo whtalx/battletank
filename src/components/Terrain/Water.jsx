@@ -1,32 +1,8 @@
-import React, { memo, useRef } from 'react';
+import React, { memo } from 'react';
 
-import { useShader, useTexture, useTextureAnimation } from '../../hooks';
 import { areEqual } from '../../utils';
 
-import { OBJECTS, SHADER } from '../../constants';
-
-function Water({ position, size }) {
-  const shader = useRef(
-    useShader({
-      fragment: SHADER.ANIMATED,
-      vertex: SHADER.ANIMATED,
-      uniforms: {
-        u_area: [0.5, 0.5],
-        u_map: useTexture(OBJECTS.BLOCK.WATER),
-        u_offset: [0, 0],
-        u_scale: [0.5, 1],
-      },
-    }),
-  );
-
-  useTextureAnimation({
-    callback(offset) {
-      shader.current.uniforms.u_offset.value[0] = offset;
-    },
-    duration: 1.25,
-    offset: 0.5,
-  });
-
+function Water({ position, shader, size }) {
   return (
     <mesh position={position}>
       <planeBufferGeometry args={[size, size, 1]} />

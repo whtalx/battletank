@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useRef } from 'react';
 
 import { Layout } from '../../contexts';
 import Brick from './Brick';
@@ -8,7 +8,10 @@ import Steel from './Steel';
 import Tree from './Tree';
 import Water from './Water';
 
+import { useShader, useTexture, useTextureAnimation } from '../../hooks';
 import { areEqual } from '../../utils';
+
+import { OBJECTS, SHADER } from '../../constants';
 
 const BLOCK_ORDER = [
   null,
@@ -21,6 +24,18 @@ const BLOCK_ORDER = [
 
 function Terrain({ map }) {
   const { block: { position: [x, y, z], size } } = useContext(Layout.Context);
+  const waterShader = useRef(
+    useShader({
+      fragment: SHADER.ANIMATED,
+      vertex: SHADER.ANIMATED,
+      uniforms: {
+        u_area: [0.5, 0.5],
+        u_map: useTexture(OBJECTS.BLOCK.WATER),
+        u_offset: [0, 0],
+        u_scale: [0.5, 1],
+      },
+    }),
+  );
 
   function getPosition(row, cell) {
     return [x + size * cell, y - size * row, z];
@@ -30,28 +45,61 @@ function Terrain({ map }) {
     return row === total && cell === total / 2;
   }
 
-  function renderRow(cells, rowIndex) {
+  function reduceMap(result, cells, rowIndex) {
     function renderCell({ type, pattern }, cellIndex, row) {
-      const key = `${rowIndex}^${cellIndex}`;
-      const position = getPosition(rowIndex, cellIndex);
+      const props = {
+        key: `${rowIndex}^${cellIndex}`,
+        position: getPosition(rowIndex, cellIndex),
+        size,
+      };
 
       if (isBasePosition(rowIndex, cellIndex, row.length - 1)) {
         return (
-          <Base key={key} position={position} size={size} />
+          <Base {...props} />
         );
       }
 
       const Block = BLOCK_ORDER[type];
 
+      switch (Block) {
+        case Brick:
+        case Steel: {
+          props.pattern = pattern;
+          break;
+        }
+
+        case Water: {
+          result.hasWater = result.hasWater || true;
+          props.shader = waterShader;
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+
       return Block && (
-        <Block key={key} pattern={pattern} position={position} size={size} />
+        <Block {...props} />
       );
     }
 
-    return cells.map(renderCell);
+    result.terrain.push(cells.map(renderCell));
+    return result;
   }
 
-  return map.map(renderRow);
+  const { hasWater, terrain } = map.reduce(reduceMap, { terrain: [] });
+
+  useTextureAnimation({
+    callback(offset) {
+      waterShader.current.uniforms.u_offset.value[0] = offset;
+    },
+    duration: 1.25,
+    enabled: hasWater,
+    offset: 0.5,
+  });
+
+  return terrain;
 }
 
 export default memo(Terrain, areEqual);
