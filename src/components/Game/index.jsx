@@ -21,22 +21,32 @@ export default function Game() {
   const { game } = useStore(selector);
   const gameRef = useRef(game);
 
-  function getStage(level) {
-    const stage = level + 1;
-    return stage < 10 ? ` ${stage}` : stage;
+  function getStage(stage) {
+    const round = stage + 1;
+    return round < 10 ? ` ${round}` : String(round);
+  }
+
+  function getLives({ lives }) {
+    return String(lives);
   }
 
   useKeyEvent({
     key: SETTINGS.KEYS.UP,
     listener() {
-      postMessage({ type: MESSAGES.SET_LEVEL, payload: increment(gameRef.current.level) });
+      postMessage({
+        type: MESSAGES.SET_STAGE,
+        payload: increment(gameRef.current.stage),
+      });
     },
   });
 
   useKeyEvent({
     key: SETTINGS.KEYS.DOWN,
     listener() {
-      postMessage({ type: MESSAGES.SET_LEVEL, payload: decrement(gameRef.current.level) });
+      postMessage({
+        type: MESSAGES.SET_STAGE,
+        payload: decrement(gameRef.current.stage),
+      });
     },
   });
 
@@ -69,7 +79,7 @@ export default function Game() {
           </mesh>
           <Text
             color={COLORS['0D']}
-            text={`STAGE ${getStage(game.level)}`}
+            text={`STAGE ${getStage(game.stage)}`}
             unit={screen.unit}
           />
         </>
@@ -77,10 +87,16 @@ export default function Game() {
     }
 
     case GAME.STATUS.RUNNING: {
+      const { enemiesDetachment, map, players, stage } = game;
+
       return (
         <>
-          <Background />
-          <Terrain levelMap={game.map} />
+          <Background
+            enemies={enemiesDetachment.length}
+            players={players.map(getLives)}
+            stage={getStage(stage)}
+          />
+          <Terrain map={map} />
         </>
       );
     }

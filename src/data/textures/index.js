@@ -3,7 +3,7 @@ import BRICK from './brick.json';
 import D_PAD from './d-pad.json';
 import FIRE from './fire.json';
 import ICE from './ice.json';
-import LEVEL from './level.json';
+import STAGE from './stage.json';
 import LIVES from './lives.json';
 import START from './start.json';
 import STEEL from './steel.json';
@@ -20,7 +20,7 @@ export default {
   [OBJECTS.BLOCK.STEEL]: STEEL,
   [OBJECTS.BLOCK.TREE]: TREE,
   [OBJECTS.BLOCK.WATER]: WATER,
-  [OBJECTS.LEVEL]: LEVEL,
+  [OBJECTS.STAGE]: STAGE,
   [OBJECTS.LIVES]: LIVES,
   [OBJECTS.UNIT]: UNIT,
   [OVERLAY.D_PAD]: D_PAD,

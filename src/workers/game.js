@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import createStore from 'zustand/vanilla';
 
-import { changeLevel } from '../utils';
+import { changeStage } from '../utils';
 
 import { GAME, MESSAGES } from '../constants';
 
@@ -27,9 +27,9 @@ self.onmessage = function onmessage({ data: { type, payload } }) {
       break;
     }
 
-    case MESSAGES.SET_LEVEL: {
+    case MESSAGES.SET_STAGE: {
       store.getState().setGame(function updateState(state) {
-        const updates = changeLevel(payload);
+        const updates = changeStage({ ...state, stage: payload });
 
         for (const key in updates) {
           if (updates.hasOwnProperty(key)) {

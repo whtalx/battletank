@@ -8,6 +8,18 @@ export const BLOCK = {
 };
 
 export const BASE = 'base';
-export const LEVEL = 'level';
+
+export const STAGE = 'stage';
+
 export const LIVES = 'lives';
+
 export const UNIT = 'unit';
+
+export const BONUS = {
+  GRENADE: 'grenade',
+  HELMET: 'helmet',
+  SHOWEL: 'showel',
+  STAR: 'star',
+  TANK: 'tank',
+  TIMER: 'timer',
+};

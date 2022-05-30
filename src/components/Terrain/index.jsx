@@ -10,7 +10,7 @@ import Water from './Water';
 
 import { areEqual } from '../../utils';
 
-const BLOCK = [
+const BLOCK_ORDER = [
   null,
   Brick,
   Steel,
@@ -19,7 +19,7 @@ const BLOCK = [
   Water,
 ];
 
-function Terrain({ levelMap }) {
+function Terrain({ map }) {
   const { block: { position: [x, y, z], size } } = useContext(Layout.Context);
 
   function getPosition(row, cell) {
@@ -31,17 +31,17 @@ function Terrain({ levelMap }) {
   }
 
   function renderRow(cells, rowIndex) {
-    function renderCell({ type, pattern }, cellIndex, map) {
+    function renderCell({ type, pattern }, cellIndex, row) {
       const key = `${rowIndex}^${cellIndex}`;
       const position = getPosition(rowIndex, cellIndex);
 
-      if (isBasePosition(rowIndex, cellIndex, map.length - 1)) {
+      if (isBasePosition(rowIndex, cellIndex, row.length - 1)) {
         return (
           <Base key={key} position={position} size={size} />
         );
       }
 
-      const Block = BLOCK[type];
+      const Block = BLOCK_ORDER[type];
 
       return Block && (
         <Block key={key} pattern={pattern} position={position} size={size} />
@@ -51,7 +51,7 @@ function Terrain({ levelMap }) {
     return cells.map(renderCell);
   }
 
-  return levelMap.map(renderRow);
+  return map.map(renderRow);
 }
 
 export default memo(Terrain, areEqual);
