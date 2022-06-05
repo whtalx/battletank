@@ -1,4 +1,5 @@
 import React from 'react';
+import { Z_INDEX } from '../../constants';
 
 import { getCharacterScale, getCharacterShape, getCharacterSize } from '../../utils';
 
@@ -20,7 +21,7 @@ function getProps({
 
       const shape = getCharacterShape(character);
       const characterSize = getCharacterSize(character);
-      const characterPosition = [result.width, 0, 0];
+      const characterPosition = [result.width, 0, Z_INDEX.TEXT];
       const characterScale = getCharacterScale({
         characterSize,
         fontSize,
@@ -52,7 +53,7 @@ function getProps({
     const linePosition = [
       center ? -width / 2 : 0,
       -lineIndex * height,
-      0,
+      Z_INDEX.TEXT,
     ];
 
     props.children.push(

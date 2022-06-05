@@ -9,6 +9,7 @@ import * as PROJECTILE from './projectile';
 import * as SETTINGS from './settings';
 import * as SHADER from './shader';
 import * as TANK from './tank';
+import * as Z_INDEX from './zIndex';
 
 export {
   ENEMY,
@@ -22,4 +23,5 @@ export {
   SETTINGS,
   SHADER,
   TANK,
+  Z_INDEX,
 };

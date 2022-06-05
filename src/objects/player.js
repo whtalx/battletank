@@ -17,6 +17,7 @@ export default function Player({ index = 0, level = 0 }) {
     projectileSpeed: PLAYER.PROJECTILE_SPEED[level],
     shield: false,
     speed: PLAYER.MOVEMENT_SPEED[level],
+    type: PLAYER.TYPE_ORDER[level],
   };
 }
 

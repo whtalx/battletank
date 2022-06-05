@@ -35,7 +35,7 @@ function Base({ position, size }) {
 
   return (
     <mesh position={position}>
-      <planeBufferGeometry args={[size, size, 1]} />
+      <planeBufferGeometry args={[size, size]} />
       <shaderMaterial args={[shader.current]} />
     </mesh>
   );

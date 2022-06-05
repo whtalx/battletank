@@ -1,6 +1,5 @@
 import React, { memo, useContext, useRef } from 'react';
 
-import { Layout } from '../../contexts';
 import Brick from './Brick';
 import Base from './Base';
 import Ice from './Ice';
@@ -10,6 +9,7 @@ import Water from './Water';
 
 import { useShader, useTexture, useTextureAnimation } from '../../hooks';
 import { areEqual } from '../../utils';
+import { Layout } from '../../contexts';
 
 import { OBJECTS, SHADER } from '../../constants';
 

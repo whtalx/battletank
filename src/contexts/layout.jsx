@@ -1,7 +1,7 @@
 import React, { createContext, useMemo } from 'react';
 import { useThree } from '@react-three/fiber';
 
-import { LAYOUT } from '../constants';
+import { LAYOUT, Z_INDEX } from '../constants';
 
 export const Context = createContext();
 
@@ -55,7 +55,7 @@ function setMapDimensions(dimensions) {
     position: [
       -LAYOUT.MAP_OFFSET * dimensions.screen.unit,
       0,
-      0,
+      Z_INDEX.MAP,
     ],
     size: LAYOUT.MAP_SIZE * dimensions.screen.unit,
   };
@@ -68,7 +68,7 @@ function setBlockDimensions(dimensions) {
   const x = -y + dimensions.map.position[0];
 
   dimensions.block = {
-    position: [x, y, 0],
+    position: [x, y, Z_INDEX.BLOCK],
     size: LAYOUT.BLOCK_SIZE * dimensions.screen.unit,
   };
 

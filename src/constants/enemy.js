@@ -16,9 +16,9 @@ export const TYPE_ORDER = [
 ];
 
 export const POSITION = [
-  [8, 200],
-  [104, 200],
-  [200, 200],
+  [-96, 96],
+  [0, 96],
+  [96, 96],
 ];
 
 export const MOVEMENT_SPEED = [SPEED.SLOW, SPEED.FAST, SPEED.SLOW, SPEED.SLOW];

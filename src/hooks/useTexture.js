@@ -40,7 +40,7 @@ export default function useTexture(name) {
       }
 
       if (fill) {
-        ctx.fillStyle = COLORS[fill];
+        ctx.fillStyle = fill in COLORS ? COLORS[fill] : fill;
         ctx.fill(fillRule);
       }
     }

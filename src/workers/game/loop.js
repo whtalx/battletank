@@ -9,13 +9,13 @@ function loopCallback(frame) {
     state.players.forEach(Player.loop({ frame, nest, state }));
     state.enemies.forEach(Enemy.loop({ frame, nest, state }));
 
-    if (state.enemiesDetachment.length && frame % state.enemySpawnTimeout === 0) {
-      const index = 20 - state.enemiesDetachment.length;
-      const level = state.enemiesDetachment[0];
-      state.enemiesDetachment = state.enemiesDetachment.slice(1);
-      const enemy = Enemy({ index, level });
-      state.enemies = [...state.enemies, enemy];
-    }
+    // if (state.enemiesDetachment.length && frame % state.enemySpawnTimeout === 0) {
+    //   const index = 20 - state.enemiesDetachment.length;
+    //   const level = state.enemiesDetachment[0];
+    //   state.enemiesDetachment = state.enemiesDetachment.slice(1);
+    //   const enemy = Enemy({ index, level });
+    //   state.enemies = [...state.enemies, enemy];
+    // }
   });
 }
 

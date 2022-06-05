@@ -3,15 +3,16 @@ import BRICK from './brick.json';
 import D_PAD from './d-pad.json';
 import FIRE from './fire.json';
 import ICE from './ice.json';
-import STAGE from './stage.json';
 import LIVES from './lives.json';
+import PLAYER_BASIC from './player-basic.json';
+import STAGE from './stage.json';
 import START from './start.json';
 import STEEL from './steel.json';
 import TREE from './tree.json';
 import UNIT from './unit.json';
 import WATER from './water.json';
 
-import { OBJECTS, OVERLAY } from '../../constants';
+import { OBJECTS, OVERLAY, PLAYER } from '../../constants';
 
 export default {
   [OBJECTS.BASE]: BASE,
@@ -26,4 +27,5 @@ export default {
   [OVERLAY.D_PAD]: D_PAD,
   [OVERLAY.FIRE]: FIRE,
   [OVERLAY.START]: START,
+  [PLAYER.TYPE.BASIC]: PLAYER_BASIC,
 };

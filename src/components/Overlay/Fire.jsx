@@ -4,7 +4,7 @@ import { Controls, Layout } from '../../contexts';
 
 import { usePointerEvent, useShader, useTexture } from '../../hooks';
 
-import { OVERLAY, SETTINGS, SHADER } from '../../constants';
+import { OVERLAY, SETTINGS, SHADER, Z_INDEX } from '../../constants';
 import { TEXTURES } from '../../data';
 
 export default function Fire() {
@@ -18,7 +18,7 @@ export default function Fire() {
         position: [
           (view.width - width) / 2 - 8 * screen.unit,
           (height - view.height) / 2 + 8 * screen.unit,
-          11,
+          Z_INDEX.OVERLAY,
         ],
         size: [width, height],
       };

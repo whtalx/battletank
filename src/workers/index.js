@@ -13,7 +13,6 @@ game.onmessage = function onmessage({ data: { type, payload } }) {
 
     case MESSAGES.STORE_UPDATE: {
       store.setState(function updateState(state) {
-        console.log(payload);
         for (const key in payload) {
           if (payload.hasOwnProperty(key)) {
             state.game[key] = payload[key];

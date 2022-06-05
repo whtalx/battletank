@@ -1,5 +1,5 @@
 import React, { memo, useContext } from 'react';
-import { OBJECTS } from '../../constants';
+import { OBJECTS, Z_INDEX } from '../../constants';
 
 import { Layout } from '../../contexts';
 import Text from '../Text';
@@ -28,7 +28,7 @@ function Background({ enemies, players, stage }) {
     const position = [
       left + blockSize * (index % 2),
       (map.size - blockSize) / 2 - blockSize * Math.floor(index / 2),
-      1,
+      Z_INDEX.STATS,
     ];
 
     return (
@@ -54,14 +54,14 @@ function Background({ enemies, players, stage }) {
           position={[blockSize / 2, 0, 1]}
           unit={screen.unit}
         />
-        <mesh position={[0, -blockSize - screen.unit, 1]}>
+        <mesh position={[0, -blockSize - screen.unit, Z_INDEX.STATS]}>
           <planeBufferGeometry args={[blockSize, blockSize]} />
           <meshBasicMaterial map={playerLives} transparent />
         </mesh>
         <Text
           color={COLORS['1D']}
           text={lives}
-          position={[blockSize / 2 + blockSize / 2, -blockSize, 1]}
+          position={[blockSize / 2 + blockSize / 2, -blockSize, Z_INDEX.STATS]}
           unit={screen.unit}
         />
       </group>
@@ -77,14 +77,14 @@ function Background({ enemies, players, stage }) {
 
     return (
       <group position={position}>
-        <mesh position={[blockSize / 2, 0, 1]}>
+        <mesh position={[blockSize / 2, 0, Z_INDEX.STATS]}>
           <planeBufferGeometry args={[blockSize * 2, blockSize * 2]} />
           <meshBasicMaterial map={stageFlag} transparent />
         </mesh>
         <Text
           color={COLORS['1D']}
           text={stage}
-          position={[blockSize / 2, -1.5 * blockSize, 1]}
+          position={[blockSize / 2, -1.5 * blockSize, Z_INDEX.STATS]}
           unit={screen.unit}
         />
       </group>
@@ -93,7 +93,7 @@ function Background({ enemies, players, stage }) {
 
   return (
     <>
-      <mesh position={[0, 0, 0]}>
+      <mesh position={[0, 0, Z_INDEX.BACKGROUND]}>
         <planeBufferGeometry args={[screen.width, screen.height]} />
         <meshBasicMaterial color={COLORS['00']} />
       </mesh>

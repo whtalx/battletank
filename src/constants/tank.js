@@ -1,3 +1,7 @@
+import { Color } from 'three';
+
+import COLOR from '../data/colors.json';
+
 export const DIRECTION = {
   NORTH: 'n',
   EAST: 'e',
@@ -39,3 +43,26 @@ export const SPEED = {
 };
 
 export const EXPLOSION_TIMEOUT = 60;
+
+export const COLORS = {
+  GRAY: [
+    ...(new Color(COLOR['0C']).toArray()),
+    ...(new Color(COLOR['10']).toArray()),
+    ...(new Color(COLOR['20']).toArray()),
+  ],
+  GREEN: [
+    ...(new Color(COLOR['0A']).toArray()),
+    ...(new Color(COLOR['1A']).toArray()),
+    ...(new Color(COLOR['3B']).toArray()),
+  ],
+  RED: [
+    ...(new Color(COLOR['04']).toArray()),
+    ...(new Color(COLOR['16']).toArray()),
+    ...(new Color(COLOR['20']).toArray()),
+  ],
+  YELLOW: [
+    ...(new Color(COLOR['18']).toArray()),
+    ...(new Color(COLOR['27']).toArray()),
+    ...(new Color(COLOR['38']).toArray()),
+  ],
+};

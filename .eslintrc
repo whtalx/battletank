@@ -30,6 +30,7 @@
     "prefer-destructuring": "off",
     "quote-props": ["error", "as-needed", { "numbers": true }],
     "import/prefer-default-export": "off",
+    "react/destructuring-assignment": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off"
   }
