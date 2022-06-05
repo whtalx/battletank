@@ -5,6 +5,7 @@ import * as LAYOUT from './layout';
 import * as MESSAGES from './messages';
 import * as OVERLAY from './overlay';
 import * as PLAYER from './player';
+import * as PROJECTILE from './projectile';
 import * as SETTINGS from './settings';
 import * as SHADER from './shader';
 import * as TANK from './tank';
@@ -17,6 +18,7 @@ export {
   MESSAGES,
   OVERLAY,
   PLAYER,
+  PROJECTILE,
   SETTINGS,
   SHADER,
   TANK,

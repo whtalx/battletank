@@ -2,7 +2,7 @@ import { store } from '../store';
 
 import { MESSAGES } from '../constants';
 
-const game = new Worker(new URL('./game.js', import.meta.url));
+const game = new Worker(new URL('./game/index.js', import.meta.url));
 
 game.onmessage = function onmessage({ data: { type, payload } }) {
   switch (type) {
@@ -11,14 +11,23 @@ game.onmessage = function onmessage({ data: { type, payload } }) {
       break;
     }
 
+    case MESSAGES.STORE_UPDATE: {
+      store.setState(function updateState(state) {
+        console.log(payload);
+        for (const key in payload) {
+          if (payload.hasOwnProperty(key)) {
+            state.game[key] = payload[key];
+          }
+        }
+      });
+
+      break;
+    }
+
     default: {
       break;
     }
   }
-
-  store.setState(function updateState(state) {
-    state.game = { ...state.game, ...payload };
-  });
 };
 
 export function postMessage(props) {

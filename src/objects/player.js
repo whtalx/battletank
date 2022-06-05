@@ -1,19 +1,100 @@
-import { PLAYER, TANK } from '../constants';
+import { v4 } from 'uuid';
+
+import { LAYOUT, PLAYER, TANK } from '../constants';
 
 export default function Player({ index = 0, level = 0 }) {
   return {
-    armor: 0,
     direction: TANK.DIRECTION.NORTH,
-    explosionTimeout: 0,
+    explosion: false,
+    immobility: false,
+    id: v4(),
+    index,
     level,
     lives: 3,
-    immobilityTimeout: 0,
-    index,
+    moving: false,
     position: PLAYER.POSITION[index],
-    projectiles: {},
-    projectileSpeed: PLAYER.PROJECTILE_SPEED[level],
     projectilesNumber: PLAYER.PROJECTILES_NUMBER[level],
-    shieldTimeout: PLAYER.SHIELD_TIMEOUT.SPAWN,
+    projectileSpeed: PLAYER.PROJECTILE_SPEED[level],
+    shield: false,
     speed: PLAYER.MOVEMENT_SPEED[level],
   };
 }
+
+Player.reset = function reset({ nest }) {
+  return function resetPlayer(player) {
+    nest.deleteIn([player.id, 'explosion']);
+    nest.deleteIn([player.id, 'immobility']);
+    nest.setIn([player.id, 'shield'], PLAYER.SHIELD_TIMEOUT.SPAWN);
+
+    return {
+      ...player,
+      direction: TANK.DIRECTION.NORTH,
+      explosion: false,
+      immobility: false,
+      moving: false,
+      position: PLAYER.POSITION[player.index],
+      shield: true,
+    };
+  };
+};
+
+Player.loop = function loop({ frame, nest }) {
+  return function updatePlayer(player) {
+    if (player.explosion) {
+      const explosionTimeout = nest.getIn([player.id, 'explosion'], 0) - 1;
+
+      if (explosionTimeout) {
+        nest.setIn([player.id, 'explosion'], explosionTimeout);
+      } else {
+        player.lives -= 1;
+
+        if (player.lives) {
+          const updates = Player.reset({ nest })({
+            level: 0,
+            projectileSpeed: PLAYER.PROJECTILE_SPEED[0],
+            projectilesNumber: PLAYER.PROJECTILES_NUMBER[0],
+            speed: PLAYER.MOVEMENT_SPEED[0],
+          });
+
+          for (const key in updates) {
+            if (updates.hasOwnProperty(key)) {
+              player[key] = updates[key];
+            }
+          }
+        }
+      }
+    } else if (player.immobility) {
+      const immobilityTimeout = nest.getIn([player.id, 'immobility'], 0) - 1;
+
+      if (immobilityTimeout) {
+        nest.setIn([player.id, 'immobility'], immobilityTimeout);
+      } else {
+        player.immobility = false;
+        nest.deleteIn([player.id, 'immobility']);
+      }
+    } else {
+      if (player.shield) {
+        const shieldTimeout = nest.getIn([player.id, 'shield'], 0) - 1;
+
+        if (shieldTimeout) {
+          nest.setIn([player.id, 'shield'], shieldTimeout);
+        } else {
+          player.shield = false;
+          nest.deleteIn([player.id, 'shield']);
+        }
+      }
+
+      if (player.moving && frame % player.speed) {
+        const { index, shift } = TANK.POSITION_SHIFT[player.direction];
+        const changedPosition = player.position[index] + shift;
+
+        if (
+          changedPosition > TANK.CENTER &&
+          changedPosition < LAYOUT.MAP_SIZE - TANK.CENTER
+        ) {
+          player.position[index] = changedPosition;
+        }
+      }
+    }
+  };
+};

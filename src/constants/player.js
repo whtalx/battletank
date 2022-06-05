@@ -1,8 +1,8 @@
 import { SPEED } from './tank';
 
 export const POSITION = [
-  [4, 12],
-  [8, 12],
+  [72, 8],
+  [136, 8],
 ];
 
 export const MOVEMENT_SPEED = [SPEED.NORMAL, SPEED.NORMAL, SPEED.NORMAL, SPEED.NORMAL];

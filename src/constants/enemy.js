@@ -3,22 +3,22 @@ import { SPEED } from './tank';
 
 export const TYPE = {
   BASIC: 'basic',
-  FASY: 'fast',
+  FAST: 'fast',
   POWER: 'power',
   ARMORED: 'armored',
 };
 
-export const LEVELS = [
+export const TYPE_ORDER = [
   TYPE.BASIC,
-  TYPE.FASY,
+  TYPE.FAST,
   TYPE.POWER,
   TYPE.ARMORED,
 ];
 
 export const POSITION = [
-  [0, 0],
-  [6, 0],
-  [12, 0],
+  [8, 200],
+  [104, 200],
+  [200, 200],
 ];
 
 export const MOVEMENT_SPEED = [SPEED.SLOW, SPEED.FAST, SPEED.SLOW, SPEED.SLOW];

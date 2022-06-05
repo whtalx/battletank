@@ -1,7 +1,6 @@
 import Player from '../objects/player';
 
 import { ENEMIES, MAPS, PATTERNS } from '../data';
-import { ENEMY } from '../constants';
 
 const enemiesCache = {};
 const mapsCache = {};
@@ -16,7 +15,7 @@ function getEnemiesDetachment(stage) {
 
     const [level, count] = group;
 
-    return result.concat(Array(count).fill(ENEMY.LEVELS[level]));
+    return result.concat(Array(count).fill(level));
   }
 
   if (!enemiesCache.hasOwnProperty(index)) {
@@ -49,7 +48,11 @@ function getMap(stage) {
 }
 
 function getEnemySpawnTimeout({ players, stage }) {
-  return 190 - stage * 4 - (players - 1) * 20;
+  const index = stage >= MAPS.length
+    ? MAPS.length - 1
+    : stage;
+
+  return 190 - index * 4 - (players - 1) * 20;
 }
 
 export function changeStage({ players, stage: index }) {
@@ -62,6 +65,7 @@ export function changeStage({ players, stage: index }) {
     enemies: [],
     enemiesDetachment: getEnemiesDetachment(stage),
     enemySpawnTimeout: getEnemySpawnTimeout({ players, stage }),
+    projectiles: [],
     stage,
     map: getMap(stage),
   };
@@ -71,7 +75,7 @@ function makePlayer(index) {
   return Player({ index });
 }
 
-export function newGame({ players = 2, score = 0, stage = 0, ...rest }) {
+export function newGame({ players = 1, score = 0, stage = 0, ...rest }) {
   return {
     players: [...Array(players).keys()].map(makePlayer),
     score,

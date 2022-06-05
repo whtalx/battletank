@@ -1,8 +1,10 @@
+import { v4 } from 'uuid';
+
 import { ENEMY, TANK } from '../constants';
 
 function getBonus(index) {
   return ENEMY.BONUS_CARRIER[index]
-    ? ENEMY.BONUS_ORDER[Math.random() * ENEMY.BONUS_ORDER.length]
+    ? ENEMY.BONUS_ORDER[Math.floor(Math.random() * ENEMY.BONUS_ORDER.length)]
     : null;
 }
 
@@ -11,13 +13,19 @@ export default function Enemy({ index = 0, level = 0 }) {
     armor: ENEMY.ARMOR_STRENGTH[level],
     bonus: getBonus(index),
     direction: TANK.DIRECTION.SOUTH,
-    explosionTimeout: 0,
+    explosion: false,
+    id: v4(),
     index,
-    level,
     position: ENEMY.POSITION[index % ENEMY.POSITION.length],
-    projectiles: {},
-    projectileSpeed: ENEMY.PROJECTILE_SPEED[level],
     projectilesNumber: ENEMY.PROJECTILES_NUMBER[level],
+    projectileSpeed: ENEMY.PROJECTILE_SPEED[level],
     speed: ENEMY.MOVEMENT_SPEED[level],
+    type: ENEMY.TYPE_ORDER[level],
   };
 }
+
+Enemy.loop = function loop({ frame, nest, state }) {
+  return function updateEnemy(enemy) {
+    // TODO: state machine
+  };
+};
