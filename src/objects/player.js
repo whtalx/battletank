@@ -1,8 +1,10 @@
 import { v4 } from 'uuid';
 
+import { splice } from '../utils/iterable';
+
 import { LAYOUT, PLAYER, TANK } from '../constants';
 
-export default function Player({ index = 0, level = 0 }) {
+export default function Player({ index = 0, level = 0, ...rest }) {
   return {
     direction: TANK.DIRECTION.NORTH,
     explosion: false,
@@ -18,6 +20,7 @@ export default function Player({ index = 0, level = 0 }) {
     shield: false,
     speed: PLAYER.MOVEMENT_SPEED[level],
     type: PLAYER.TYPE_ORDER[level],
+    ...rest,
   };
 }
 
@@ -89,11 +92,9 @@ Player.loop = function loop({ frame, nest }) {
         const { index, shift } = TANK.POSITION_SHIFT[player.direction];
         const changedPosition = player.position[index] + shift;
 
-        if (
-          changedPosition > TANK.CENTER &&
-          changedPosition < LAYOUT.MAP_SIZE - TANK.CENTER
-        ) {
-          player.position[index] = changedPosition;
+        if (Math.abs(changedPosition) + TANK.CENTER <= LAYOUT.MAP_SIZE / 2) {
+          // TODO: collisions
+          player.position = splice(player.position, index, changedPosition);
         }
       }
     }

@@ -23,6 +23,18 @@ game.onmessage = function onmessage({ data: { type, payload } }) {
       break;
     }
 
+    case MESSAGES.SET_SESSION: {
+      store.setState(function updateState(state) {
+        for (const key in payload) {
+          if (payload.hasOwnProperty(key)) {
+            state.session[key] = payload[key];
+          }
+        }
+      });
+
+      break;
+    }
+
     default: {
       break;
     }

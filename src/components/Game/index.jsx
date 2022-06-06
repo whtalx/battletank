@@ -7,15 +7,22 @@ import { useKeyEvent, useStore } from '../../hooks';
 import { decrement, increment } from '../../utils';
 import { postMessage } from '../../workers';
 
-import { GAME, MESSAGES, SETTINGS } from '../../constants';
+import { EVENTS, GAME, MESSAGES, SETTINGS, TANK } from '../../constants';
 
-function selector({ game: { stage, status } }) {
-  return { game: { stage, status } };
+function selector({ game: { stage, status }, session: { setSession, ...session } }) {
+  return { game: { stage, status }, session };
 }
 
 export default function Game() {
-  const { game } = useStore(selector);
-  const gameRef = useRef(game);
+  const state = useStore(selector);
+  const stateRef = useRef(state);
+
+  useEffect(
+    function effect() {
+      stateRef.current = state;
+    },
+    [state],
+  );
 
   function getStringStage(stage) {
     const round = stage + 1;
@@ -24,57 +31,226 @@ export default function Game() {
 
   useKeyEvent({
     key: SETTINGS.KEYS.UP,
+    type: EVENTS.DOWN,
     listener() {
-      if (gameRef.current.status === GAME.STATUS.WAITING) {
-        postMessage({
-          type: MESSAGES.SET_STAGE,
-          payload: increment(gameRef.current.stage),
-        });
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.WAITING: {
+          postMessage({
+            type: MESSAGES.SET_STAGE,
+            payload: increment(stateRef.current.game.stage),
+          });
+          break;
+        }
+
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              direction: TANK.DIRECTION.NORTH,
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
       }
     },
   });
 
   useKeyEvent({
     key: SETTINGS.KEYS.DOWN,
+    type: EVENTS.DOWN,
     listener() {
-      if (gameRef.current.status === GAME.STATUS.WAITING) {
-        postMessage({
-          type: MESSAGES.SET_STAGE,
-          payload: decrement(gameRef.current.stage),
-        });
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.WAITING: {
+          postMessage({
+            type: MESSAGES.SET_STAGE,
+            payload: decrement(stateRef.current.game.stage),
+          });
+          break;
+        }
+
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              direction: TANK.DIRECTION.SOUTH,
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    },
+  });
+
+  useKeyEvent({
+    key: SETTINGS.KEYS.LEFT,
+    type: EVENTS.DOWN,
+    listener() {
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              direction: TANK.DIRECTION.WEST,
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    },
+  });
+
+  useKeyEvent({
+    key: SETTINGS.KEYS.RIGHT,
+    type: EVENTS.DOWN,
+    listener() {
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              direction: TANK.DIRECTION.EAST,
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    },
+  });
+
+  useKeyEvent({
+    key: SETTINGS.KEYS.UP,
+    type: EVENTS.UP,
+    listener() {
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    },
+  });
+
+  useKeyEvent({
+    key: SETTINGS.KEYS.DOWN,
+    type: EVENTS.UP,
+    listener() {
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    },
+  });
+
+  useKeyEvent({
+    key: SETTINGS.KEYS.LEFT,
+    type: EVENTS.UP,
+    listener() {
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
+      }
+    },
+  });
+
+  useKeyEvent({
+    key: SETTINGS.KEYS.RIGHT,
+    type: EVENTS.UP,
+    listener() {
+      switch (stateRef.current.game.status) {
+        case GAME.STATUS.RUNNING: {
+          postMessage({
+            type: MESSAGES.SET_DIRECTION,
+            payload: {
+              session: stateRef.current.session,
+            },
+          });
+          break;
+        }
+
+        default: {
+          break;
+        }
       }
     },
   });
 
   useKeyEvent({
     key: SETTINGS.KEYS.START,
+    type: EVENTS.DOWN,
     listener() {
       postMessage({
         type: MESSAGES.SET_STATE,
-        payload: gameRef.current.status === GAME.STATUS.WAITING
-          ? GAME.STATUS.RUNNING
-          : GAME.STATUS.WAITING,
+        payload: {
+          session: stateRef.current.session,
+          status: stateRef.current.game.status === GAME.STATUS.WAITING
+            ? GAME.STATUS.RUNNING
+            : GAME.STATUS.WAITING,
+        },
       });
     },
   });
 
-  useEffect(
-    function effect() {
-      gameRef.current = game;
-    },
-    [game],
-  );
-
-  switch (game.status) {
+  switch (state.game.status) {
     case GAME.STATUS.WAITING: {
       return (
-        <Curtain stringStage={getStringStage(game.stage)} />
+        <Curtain stringStage={getStringStage(state.game.stage)} />
       );
     }
 
     case GAME.STATUS.RUNNING: {
       return (
-        <Round game={game} stringStage={getStringStage(game.stage)} />
+        <Round game={state.game} stringStage={getStringStage(state.game.stage)} />
       );
     }
 

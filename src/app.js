@@ -6,6 +6,7 @@ import App from './components';
 
 import { preventDefault } from './utils';
 import { postMessage } from './workers';
+import { store } from './store';
 
 import { MESSAGES } from './constants';
 
@@ -26,5 +27,7 @@ export function render(canvas) {
     root.configure({ size: getSize() });
   });
 
-  postMessage({ type: MESSAGES.INIT });
+  const { session: { setSession, ...session } } = store.getState();
+
+  postMessage({ type: MESSAGES.INIT, payload: { session } });
 }

@@ -3,7 +3,9 @@ import { useContext, useEffect } from 'react';
 
 import { Controls } from '../contexts';
 
-export default function useKeyEvent({ key, listener, type = 'down' }) {
+import { EVENTS } from '../constants';
+
+export default function useKeyEvent({ key, listener, type = EVENTS.DOWN }) {
   const { on, off } = useContext(Controls.Context);
 
   useEffect(

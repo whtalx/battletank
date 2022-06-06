@@ -2,6 +2,7 @@ import { Player } from '../../objects';
 
 import { changeStage } from '../../utils/game';
 import { saveUpdates } from './store';
+import { splice } from '../../utils/iterable';
 import { loop } from './loop';
 import { nest } from './nest';
 
@@ -13,23 +14,33 @@ self.onmessage = function onMessage({ data: { type, payload } }) {
 
     switch (type) {
       case MESSAGES.INIT: {
-        self.postMessage({ type });
+        updates.stage = 0;
         updates.status = GAME.STATUS.WAITING;
+        const index = state.players.length;
+        const player = Player({ index, level: 0, ...payload.session });
+        updates.players = splice(state.players, index, player);
+
+        self.postMessage({
+          type: MESSAGES.SET_SESSION,
+          payload: { id: player.id, index: player.index },
+        });
+
+        self.postMessage({ type });
         break;
       }
 
       case MESSAGES.SET_STAGE: {
-        updates = changeStage({ players: state.players.length, stage: payload });
+        updates = changeStage({ players: state.players, stage: payload });
         break;
       }
 
       case MESSAGES.SET_STATE: {
-        switch (payload) {
+        switch (payload.status) {
           case GAME.STATUS.RUNNING: {
             updates = {
-              ...changeStage({ players: state.players.length, stage: state.stage }),
+              ...changeStage({ players: state.players, stage: state.stage }),
               players: state.players.map(Player.reset({ nest })),
-              status: payload,
+              status: payload.status,
             };
 
             loop.start();
@@ -38,7 +49,7 @@ self.onmessage = function onMessage({ data: { type, payload } }) {
 
           case GAME.STATUS.WAITING: {
             loop.stop();
-            updates.status = payload;
+            updates.status = payload.status;
             break;
           }
 
@@ -46,6 +57,25 @@ self.onmessage = function onMessage({ data: { type, payload } }) {
             break;
           }
         }
+
+        break;
+      }
+
+      case MESSAGES.SET_DIRECTION: {
+        const { direction, session: { index, id } } = payload;
+
+        if (id !== state.players[index].id) break;
+
+        const player = { ...state.players[index] };
+
+        if (direction) {
+          player.direction = direction;
+          player.moving = true;
+        } else {
+          player.moving = false;
+        }
+
+        updates.players = splice(state.players, index, player);
 
         break;
       }

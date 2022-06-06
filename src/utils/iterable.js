@@ -74,3 +74,11 @@ export function areEqual(...comparers) {
 
   return reduce(comparers[0], true, callback);
 }
+
+export function splice(array, index, ...items) {
+  return [
+    ...array.slice(0, index),
+    ...items,
+    ...array.slice(index + items.length),
+  ];
+}

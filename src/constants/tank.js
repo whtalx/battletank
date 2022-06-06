@@ -24,9 +24,9 @@ export const SHIFT = 1.25;
 
 export const POSITION_SHIFT = {
   [DIRECTION.NORTH]: { index: 1, shift: SHIFT },
-  [DIRECTION.WEST]: { index: 0, shift: SHIFT },
+  [DIRECTION.WEST]: { index: 0, shift: -SHIFT },
   [DIRECTION.SOUTH]: { index: 1, shift: -SHIFT },
-  [DIRECTION.EAST]: { index: 0, shift: -SHIFT },
+  [DIRECTION.EAST]: { index: 0, shift: SHIFT },
 };
 
 export const STATUS = {

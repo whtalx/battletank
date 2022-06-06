@@ -3,6 +3,7 @@ import React, { createContext, useCallback, useEffect, useMemo, useRef } from 'r
 import { forEach, reduce } from '../utils/iterable';
 import useStore from '../hooks/useStore';
 
+import { DOWN, UP } from '../constants/events';
 import { KEYS } from '../constants/settings';
 
 export const Context = createContext();
@@ -23,7 +24,7 @@ function selector({ controls, settings: { keyBindings } }) {
 
 function getInitialListeners() {
   function reduceKeys(result, key) {
-    result[key] = { down: new Set(), up: new Set() };
+    result[key] = { [DOWN]: new Set(), [UP]: new Set() };
     return result;
   }
 
@@ -62,7 +63,7 @@ function getLastPressed({ key, keyPressed }) {
     case KEYS.LEFT:
     case KEYS.RIGHT:
     case KEYS.UP: {
-      return reduce(keyPressed.current, {}, reduceKeys).key;
+      return reduce(keyPressed, {}, reduceKeys).key;
     }
 
     default: {
@@ -94,7 +95,7 @@ export function Provider({ children }) {
           [keyCode]: Date.now(),
         };
 
-        if (!alreadyPressed) fireEvents({ event, key, type: 'down' });
+        if (!alreadyPressed) fireEvents({ event, key, type: DOWN });
       }
     },
     [],
@@ -113,9 +114,9 @@ export function Provider({ children }) {
           const lastPressed = getLastPressed({ key, keyPressed: keyPressed.current });
 
           if (lastPressed) {
-            fireEvents({ event, key: lastPressed, type: 'down' });
+            fireEvents({ event, key: lastPressed, type: DOWN });
           } else {
-            fireEvents({ event, key, type: 'up' });
+            fireEvents({ event, key, type: UP });
           }
         }
       }
@@ -159,22 +160,22 @@ export function Provider({ children }) {
   const contextValue = useMemo(
     function factory() {
       return {
-        up,
-        down,
+        [DOWN]: down,
+        [UP]: up,
         on: {
-          down(key, listener) {
-            listeners.current[key].down.add(listener);
+          [DOWN](key, listener) {
+            listeners.current[key][DOWN].add(listener);
           },
-          up(key, listener) {
-            listeners.current[key].up.add(listener);
+          [UP](key, listener) {
+            listeners.current[key][UP].add(listener);
           },
         },
         off: {
-          down(key, listener) {
-            listeners.current[key].down.delete(listener);
+          [DOWN](key, listener) {
+            listeners.current[key][DOWN].delete(listener);
           },
-          up(key, listener) {
-            listeners.current[key].up.delete(listener);
+          [UP](key, listener) {
+            listeners.current[key][UP].delete(listener);
           },
         },
       };

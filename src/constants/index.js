@@ -1,8 +1,9 @@
 import * as ENEMY from './enemy';
-import * as OBJECTS from './objects';
+import * as EVENTS from './events';
 import * as GAME from './game';
 import * as LAYOUT from './layout';
 import * as MESSAGES from './messages';
+import * as OBJECTS from './objects';
 import * as OVERLAY from './overlay';
 import * as PLAYER from './player';
 import * as PROJECTILE from './projectile';
@@ -13,6 +14,7 @@ import * as Z_INDEX from './zIndex';
 
 export {
   ENEMY,
+  EVENTS,
   GAME,
   OBJECTS,
   LAYOUT,

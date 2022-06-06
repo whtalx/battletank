@@ -1,5 +1,3 @@
-import Player from '../objects/player';
-
 import { ENEMIES, MAPS, PATTERNS } from '../data';
 
 const enemiesCache = {};
@@ -52,7 +50,7 @@ function getEnemySpawnTimeout({ players, stage }) {
     ? MAPS.length - 1
     : stage;
 
-  return 190 - index * 4 - (players - 1) * 20;
+  return 190 - index * 4 - (players.length - 1) * 20;
 }
 
 export function changeStage({ players, stage: index }) {
@@ -71,15 +69,10 @@ export function changeStage({ players, stage: index }) {
   };
 }
 
-function makePlayer(index) {
-  return Player({ index });
-}
-
-export function newGame({ players = 1, score = 0, stage = 0, ...rest }) {
+export function newGame({ players = [], score = 0, ...rest } = {}) {
   return {
-    players: [...Array(players).keys()].map(makePlayer),
+    players,
     score,
-    ...changeStage({ players, stage }),
     ...rest,
   };
 }
