@@ -7,7 +7,7 @@ import Steel from './Steel';
 import Tree from './Tree';
 import Water from './Water';
 
-import { useShader, useTexture, useTextureAnimation } from '../../hooks';
+import { useAnimation, useShader, useTexture } from '../../hooks';
 import { areEqual } from '../../utils';
 import { Layout } from '../../contexts';
 
@@ -88,9 +88,9 @@ function Terrain({ map }) {
     return result;
   }
 
-  const { hasWater, terrain } = map.reduce(reduceMap, { terrain: [] });
+  const { hasWater, terrain } = map.reduce(reduceMap, { hasWater: false, terrain: [] });
 
-  useTextureAnimation({
+  useAnimation({
     callback(offset) {
       waterShader.current.uniforms.u_offset.value[0] = offset;
     },

@@ -66,3 +66,17 @@ export const COLORS = {
     ...(new Color(COLOR['38']).toArray()),
   ],
 };
+
+export const ROTATION = {
+  [DIRECTION.EAST]: true,
+  [DIRECTION.NORTH]: false,
+  [DIRECTION.SOUTH]: false,
+  [DIRECTION.WEST]: true,
+};
+
+export const TRANSFORM = {
+  [DIRECTION.EAST]: [-1, 1],
+  [DIRECTION.NORTH]: [1, 1],
+  [DIRECTION.SOUTH]: [1, -1],
+  [DIRECTION.WEST]: [-1, -1],
+};

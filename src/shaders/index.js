@@ -4,8 +4,10 @@ import animatedPatternFragment from './animatedPattern.frag';
 // import colorMapFragment from './colorMap.frag';
 import constantFragment from './constant.frag';
 import patternFragment from './pattern.frag';
-import constantVertex from './constant.vert';
 import animatedVertex from './animated.vert';
+import animatedTransformVertex from './animatedTransform.vert';
+import constantVertex from './constant.vert';
+// import transformVertex from './transform.vert';
 
 import { SHADER } from '../constants';
 
@@ -19,6 +21,8 @@ export const FRAGMENT = {
 };
 
 export const VERTEX = {
-  [SHADER.CONSTANT]: constantVertex,
   [SHADER.ANIMATED]: animatedVertex,
+  [SHADER.ANIMATED_TRANSFORM]: animatedTransformVertex,
+  [SHADER.CONSTANT]: constantVertex,
+  // [SHADER.TRANSFORM]: transformVertex,
 };

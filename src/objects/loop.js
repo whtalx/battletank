@@ -1,3 +1,5 @@
+import { FRAME } from '../constants/game';
+
 export default function Loop(callback) {
   let interval;
   let frame = 0;
@@ -9,7 +11,7 @@ export default function Loop(callback) {
 
   return {
     start() {
-      interval = setInterval(loopCallback, 1000 / 60);
+      interval = setInterval(loopCallback, FRAME);
     },
     stop() {
       interval = clearInterval(interval);

@@ -71,7 +71,7 @@ self.onmessage = function onMessage({ data: { type, payload } }) {
         if (direction) {
           player.direction = direction;
           player.moving = true;
-        } else {
+        } else if (player.moving) {
           player.moving = false;
         }
 

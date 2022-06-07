@@ -13,3 +13,5 @@ export const BONUS_TIMEOUT = {
   [BONUS.TIMER]: 600,
   [BONUS.SHOWEL]: 1200,
 };
+
+export const FRAME = 1000 / 60;

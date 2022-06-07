@@ -95,6 +95,8 @@ Player.loop = function loop({ frame, nest }) {
         if (Math.abs(changedPosition) + TANK.CENTER <= LAYOUT.MAP_SIZE / 2) {
           // TODO: collisions
           player.position = splice(player.position, index, changedPosition);
+        } else {
+          player.moving = false;
         }
       }
     }
