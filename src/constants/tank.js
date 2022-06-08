@@ -1,5 +1,6 @@
 import { Color } from 'three';
 
+import { MAP_SIZE } from './layout';
 import COLOR from '../data/colors.json';
 
 export const DIRECTION = {
@@ -18,9 +19,9 @@ export const DIRECTION_ORDER = [
 
 export const SIZE = 16;
 
-export const CENTER = SIZE / 2;
+export const POSITION_CONSTRAINT = (MAP_SIZE - SIZE) / 2;
 
-export const SHIFT = 1.25;
+export const SHIFT = 1;
 
 export const POSITION_SHIFT = {
   [DIRECTION.NORTH]: { index: 1, shift: SHIFT },

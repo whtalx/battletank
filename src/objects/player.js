@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 
 import { splice } from '../utils/iterable';
 
-import { LAYOUT, PLAYER, TANK } from '../constants';
+import { PLAYER, TANK } from '../constants';
 
 export default function Player({ index = 0, level = 0, ...rest }) {
   return {
@@ -88,11 +88,11 @@ Player.loop = function loop({ frame, nest }) {
         }
       }
 
-      if (player.moving && frame % player.speed) {
+      if (player.moving && player.speed > frame) {
         const { index, shift } = TANK.POSITION_SHIFT[player.direction];
         const changedPosition = player.position[index] + shift;
 
-        if (Math.abs(changedPosition) + TANK.CENTER <= LAYOUT.MAP_SIZE / 2) {
+        if (Math.abs(changedPosition) <= TANK.POSITION_CONSTRAINT) {
           // TODO: collisions
           player.position = splice(player.position, index, changedPosition);
         } else {

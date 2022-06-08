@@ -1,4 +1,6 @@
-import React, { memo, useContext, useEffect, useRef } from 'react';
+import React, { memo, useContext, useEffect, useMemo, useRef } from 'react';
+
+import Shield from './Shield';
 
 import { useShader, useTexture } from '../../hooks';
 import { areEqual } from '../../utils';
@@ -6,8 +8,7 @@ import { Layout } from '../../contexts';
 
 import { PLAYER, SHADER, TANK, Z_INDEX } from '../../constants';
 
-function Player({ direction, index, moving, position, type }) {
-  const { block, map, screen } = useContext(Layout.Context);
+function Player({ direction, index, position, shield, type }) {
   const shader = useRef(
     useShader({
       fragment: SHADER.ANIMATED_COLOR_MAP,
@@ -24,6 +25,14 @@ function Player({ direction, index, moving, position, type }) {
     }),
   );
 
+  const {
+    block: { size },
+    map: { position: [mx, my] },
+    screen: { unit },
+  } = useContext(Layout.Context);
+
+  const [tx, ty] = position;
+
   useEffect(
     function effect() {
       shader.current.uniforms.u_rotation.value = TANK.ROTATION[direction];
@@ -34,23 +43,25 @@ function Player({ direction, index, moving, position, type }) {
 
   useEffect(
     function effect() {
-      if (!moving) return;
-
       shader.current.uniforms.u_offset.value[0] = shader.current.uniforms.u_offset.value[0]
         ? 0
         : shader.current.uniforms.u_scale.value[0];
     },
-    [moving, position],
+    [tx, ty],
   );
 
-  function mapCoords(x, y) {
-    return x * screen.unit + map.position[y];
-  }
+  const meshPosition = useMemo(
+    function factory() {
+      return [tx * unit + mx, ty * unit + my, Z_INDEX.TANK];
+    },
+    [mx, my, tx, ty, unit],
+  );
 
   return (
-    <mesh position={[...position.map(mapCoords), Z_INDEX.TANK]}>
-      <planeBufferGeometry args={[block.size, block.size]} />
+    <mesh position={meshPosition}>
+      <planeBufferGeometry args={[size, size]} />
       <shaderMaterial args={[shader.current]} />
+      {shield && <Shield />}
     </mesh>
   );
 }

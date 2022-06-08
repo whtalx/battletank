@@ -11,6 +11,8 @@ export const BASE = 'base';
 
 export const STAGE = 'stage';
 
+export const SHIELD = 'shield';
+
 export const LIVES = 'lives';
 
 export const UNIT = 'unit';

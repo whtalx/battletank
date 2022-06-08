@@ -14,7 +14,7 @@ export default function Projectile({ direction, parent, position, power, speed }
 
 Projectile.loop = function loop({ frame, nest, state }) {
   return function updateProjectile(projectile) {
-    if (frame % projectile.speed) {
+    if (projectile.speed > frame) {
       // TODO: collisions
     }
   };

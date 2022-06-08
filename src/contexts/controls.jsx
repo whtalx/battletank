@@ -135,15 +135,19 @@ export function Provider({ children }) {
       }
 
       function onKeyDown(event) {
-        const { keyCode } = event;
-        const key = getKeyByCode(keyCode);
-        down({ event, key, keyCode });
+        const { keyCode, metaKey } = event;
+
+        if (metaKey) return;
+
+        down({ event, key: getKeyByCode(keyCode), keyCode });
       }
 
       function onKeyUp(event) {
-        const { keyCode } = event;
-        const key = getKeyByCode(keyCode);
-        up({ event, key, keyCode });
+        const { keyCode, metaKey } = event;
+
+        if (metaKey) return;
+
+        up({ event, key: getKeyByCode(keyCode), keyCode });
       }
 
       window.addEventListener('keydown', onKeyDown);

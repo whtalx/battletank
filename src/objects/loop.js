@@ -5,8 +5,8 @@ export default function Loop(callback) {
   let frame = 0;
 
   function loopCallback() {
-    frame += 1;
     callback(frame);
+    frame = (frame + 1) % 4;
   }
 
   return {

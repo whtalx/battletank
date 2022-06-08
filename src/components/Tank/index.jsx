@@ -9,8 +9,15 @@ export default function Tank(props) {
     case PLAYER.TYPE.DOUBLE_SHOT:
     case PLAYER.TYPE.FAST_SHOT:
     case PLAYER.TYPE.POWER_SHOT: {
+      const { direction, index, position, shield, type } = props;
       return (
-        <Player {...props} />
+        <Player
+          direction={direction}
+          index={index}
+          position={position}
+          shield={shield}
+          type={type}
+        />
       );
     }
 
