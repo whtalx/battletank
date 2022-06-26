@@ -4,7 +4,7 @@ import Background from '../Background';
 import Tank from '../Tank';
 import Terrain from '../Terrain';
 
-import { useStore } from '../../hooks';
+import { useStore } from '../../hooks/useStore';
 
 function reducePlayers(result, player) {
   result.lives.push(String(player.lives));

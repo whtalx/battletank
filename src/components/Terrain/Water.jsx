@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-import { areEqual } from '../../utils';
+import { areEqual } from '../../utils/iterable';
 
 function Water({ position, shader, size }) {
   return (

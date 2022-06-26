@@ -1,6 +1,6 @@
 import produce from 'immer';
 
-import { getFromLocalStorage } from '../utils';
+import { getFromLocalStorage } from '../utils/localStorage';
 
 export default function session(set) {
   return {

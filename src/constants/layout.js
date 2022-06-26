@@ -1,8 +1,39 @@
-export const WIDTH = 256;
-export const HEIGHT = 240;
-export const MAP_SIZE = 208;
-export const MAP_OFFSET = (HEIGHT - MAP_SIZE) / 4;
-export const BLOCK_SIZE = MAP_SIZE / 13;
-export const BLOCK_OFFSET = BLOCK_SIZE / 2;
-export const VERTICAL = 'v';
-export const HORIZONTAL = 'h';
+const WIDTH = 256;
+const HEIGHT = 240;
+const MAP_SIZE = 208;
+const MAP_HALF = MAP_SIZE / 2;
+const MAP_OFFSET = (HEIGHT - MAP_SIZE) / 4;
+const BLOCK_SIZE = MAP_SIZE / 13;
+const BLOCK_OFFSET = BLOCK_SIZE / 2;
+const BLOCK_PATTERN = BLOCK_OFFSET / 2;
+const VERTICAL = 'v';
+const HORIZONTAL = 'h';
+const Z_INDEX = {
+  BACKGROUND: 0,
+  MAP: 1,
+  BLOCK: 2,
+  WATER: 2,
+  TANK: 3,
+  PROJECTILE: 4,
+  TREE: 5,
+  EXPLOSION: 6,
+  STATS: 7,
+  SCORE: 8,
+  CURTAIN: 8,
+  TEXT: 9,
+  OVERLAY: 10,
+};
+
+export default {
+  WIDTH,
+  HEIGHT,
+  MAP_SIZE,
+  MAP_HALF,
+  MAP_OFFSET,
+  BLOCK_SIZE,
+  BLOCK_OFFSET,
+  BLOCK_PATTERN,
+  VERTICAL,
+  HORIZONTAL,
+  Z_INDEX,
+};

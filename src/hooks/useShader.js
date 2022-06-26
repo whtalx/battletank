@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 
-import { reduce } from '../utils';
+import { reduce } from '../utils/iterable';
+
+import SHADER from '../constants/shader';
 
 import { FRAGMENT, VERTEX } from '../shaders';
-import { SHADER } from '../constants';
 
-export default function useShader({ fragment, uniforms, vertex }) {
+export function useShader({ fragment, uniforms, vertex }) {
   const shader = useMemo(
     function factory() {
       function reduceUniforms(result, value, key) {

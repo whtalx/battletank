@@ -1,6 +1,6 @@
 import { store } from '../store';
 
-import { MESSAGES } from '../constants';
+import MESSAGES from '../constants/messages';
 
 const game = new Worker(new URL('./game/index.js', import.meta.url));
 

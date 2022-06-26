@@ -1,9 +1,13 @@
 import React, { memo, useEffect, useRef } from 'react';
 
-import { useShader, useStore, useTexture } from '../../hooks';
-import { areEqual } from '../../utils';
+import { areEqual } from '../../utils/iterable';
 
-import { OBJECTS, SHADER } from '../../constants';
+import { useTexture } from '../../hooks/useTexture';
+import { useShader } from '../../hooks/useShader';
+import { useStore } from '../../hooks/useStore';
+
+import OBJECTS from '../../constants/objects';
+import SHADER from '../../constants/shader';
 
 function selector({ game: { defeated } }) {
   return {
@@ -19,7 +23,7 @@ function Base({ position, size }) {
       vertex: SHADER.ANIMATED,
       uniforms: {
         u_area: [1, 1],
-        u_map: useTexture(OBJECTS.BASE),
+        u_map: useTexture(OBJECTS.BLOCK.BASE),
         u_offset: [0, 0],
         u_scale: [0.5, 1],
       },

@@ -22,6 +22,9 @@
       const loader = document.createElement('div');
       loader.id = 'loader';
       document.getElementById('terminal').appendChild(loader);
+      document.body.addEventListener('touchstart', function(event) {
+        event.returnValue = false;
+      });
     </script>
   </body>
 </html>

@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from 'react';
 
-import { Controls } from '../contexts';
+import { Controls } from '../contexts/controls';
 
-import { EVENTS } from '../constants';
+import EVENTS from '../constants/events';
 
-export default function useKeyEvent({ key, listener, type = EVENTS.DOWN }) {
-  const { on, off } = useContext(Controls.Context);
+export function useKeyEvent({ key, listener, type = EVENTS.DOWN }) {
+  const { on, off } = useContext(Controls);
 
   useEffect(
     function effect() {

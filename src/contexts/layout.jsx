@@ -1,11 +1,11 @@
 import React, { createContext, useMemo } from 'react';
 import { useThree } from '@react-three/fiber';
 
-import { LAYOUT, Z_INDEX } from '../constants';
+import LAYOUT from '../constants/layout';
 
-export const Context = createContext();
+export const Layout = createContext();
 
-Context.displayName = 'LayoutContext';
+Layout.displayName = 'LayoutContext';
 
 function getViewDimensions({ width, height }) {
   return {
@@ -55,7 +55,7 @@ function setMapDimensions(dimensions) {
     position: [
       -LAYOUT.MAP_OFFSET * dimensions.screen.unit,
       0,
-      Z_INDEX.MAP,
+      LAYOUT.Z_INDEX.MAP,
     ],
     size: LAYOUT.MAP_SIZE * dimensions.screen.unit,
   };
@@ -68,14 +68,14 @@ function setBlockDimensions(dimensions) {
   const x = -y + dimensions.map.position[0];
 
   dimensions.block = {
-    position: [x, y, Z_INDEX.BLOCK],
+    position: [x, y, LAYOUT.Z_INDEX.BLOCK],
     size: LAYOUT.BLOCK_SIZE * dimensions.screen.unit,
   };
 
   return dimensions;
 }
 
-export function Provider({ children }) {
+Layout.Wrapper = function Wrapper({ children }) {
   const { width, height } = useThree(function getSize(state) {
     return state.size;
   });
@@ -94,8 +94,8 @@ export function Provider({ children }) {
   );
 
   return (
-    <Context.Provider value={contextValue}>
+    <Layout.Provider value={contextValue}>
       {children}
-    </Context.Provider>
+    </Layout.Provider>
   );
-}
+};

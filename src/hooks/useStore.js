@@ -2,4 +2,4 @@ import create from 'zustand';
 
 import { store } from '../store';
 
-export default create(store);
+export const useStore = create(store);

@@ -7,23 +7,28 @@ import Steel from './Steel';
 import Tree from './Tree';
 import Water from './Water';
 
-import { useAnimation, useShader, useTexture } from '../../hooks';
-import { areEqual } from '../../utils';
-import { Layout } from '../../contexts';
+import { Layout } from '../../contexts/layout';
 
-import { OBJECTS, SHADER } from '../../constants';
+import { useAnimation } from '../../hooks/useAnimation';
+import { useTexture } from '../../hooks/useTexture';
+import { useShader } from '../../hooks/useShader';
 
-const BLOCK_ORDER = [
-  null,
-  Brick,
-  Steel,
-  Tree,
-  Ice,
-  Water,
-];
+import { areEqual } from '../../utils/iterable';
+
+import OBJECTS from '../../constants/objects';
+import SHADER from '../../constants/shader';
+
+const BLOCK_ELEMENT = {
+  [OBJECTS.BLOCK.BASE]: Base,
+  [OBJECTS.BLOCK.BRICK]: Brick,
+  [OBJECTS.BLOCK.ICE]: Ice,
+  [OBJECTS.BLOCK.STEEL]: Steel,
+  [OBJECTS.BLOCK.TREE]: Tree,
+  [OBJECTS.BLOCK.WATER]: Water,
+};
 
 function Terrain({ map }) {
-  const { block: { position: [x, y, z], size } } = useContext(Layout.Context);
+  const { block: { position: [x, y, z], size } } = useContext(Layout);
   const waterShader = useRef(
     useShader({
       fragment: SHADER.ANIMATED,
@@ -41,27 +46,17 @@ function Terrain({ map }) {
     return [x + size * cell, y - size * row, z];
   }
 
-  function isBasePosition(row, cell, total) {
-    return row === total && cell === total / 2;
-  }
-
   function reduceMap(result, cells, rowIndex) {
-    function renderCell({ type, pattern }, cellIndex, row) {
+    function renderCell({ type, pattern }, cellIndex) {
       const props = {
         key: `${rowIndex}^${cellIndex}`,
         position: getPosition(rowIndex, cellIndex),
         size,
       };
 
-      if (isBasePosition(rowIndex, cellIndex, row.length - 1)) {
-        return (
-          <Base {...props} />
-        );
-      }
+      const Element = BLOCK_ELEMENT[OBJECTS.BLOCK_TYPE_ORDER[type]];
 
-      const Block = BLOCK_ORDER[type];
-
-      switch (Block) {
+      switch (Element) {
         case Brick:
         case Steel: {
           props.pattern = pattern;
@@ -79,8 +74,8 @@ function Terrain({ map }) {
         }
       }
 
-      return Block && (
-        <Block {...props} />
+      return Element && (
+        <Element {...props} />
       );
     }
 

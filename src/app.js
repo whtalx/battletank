@@ -4,11 +4,11 @@ import { OrthographicCamera } from 'three';
 
 import App from './components';
 
-import { preventDefault } from './utils';
+import { preventDefault } from './utils/events';
 import { postMessage } from './workers';
 import { store } from './store';
 
-import { MESSAGES } from './constants';
+import MESSAGES from './constants/messages';
 
 export function render(canvas) {
   function getSize() {

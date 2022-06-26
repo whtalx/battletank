@@ -1,47 +1,58 @@
-import { BONUS } from './objects';
-import { SPEED } from './tank';
+import OBJECTS from './objects';
+import SPEED from './tank';
 
-export const TYPE = {
+const TYPE = {
   BASIC: 'basic',
   FAST: 'fast',
   POWER: 'power',
   ARMORED: 'armored',
 };
 
-export const TYPE_ORDER = [
+const TYPE_ORDER = [
   TYPE.BASIC,
   TYPE.FAST,
   TYPE.POWER,
   TYPE.ARMORED,
 ];
 
-export const POSITION = [
+const POSITION = [
   [-96, 96],
   [0, 96],
   [96, 96],
 ];
 
-export const MOVEMENT_SPEED = [SPEED.SLOW, SPEED.FAST, SPEED.SLOW, SPEED.SLOW];
+const MOVEMENT_SPEED = [SPEED.SLOW, SPEED.FAST, SPEED.SLOW, SPEED.SLOW];
 
-export const PROJECTILE_SPEED = [SPEED.SLOW, SPEED.SLOW, SPEED.FAST, SPEED.SLOW];
+const PROJECTILE_SPEED = [SPEED.SLOW, SPEED.SLOW, SPEED.FAST, SPEED.SLOW];
 
-export const PROJECTILES_NUMBER = [1, 1, 1, 1];
+const PROJECTILES_NUMBER = [1, 1, 1, 1];
 
-export const ARMOR_STRENGTH = [0, 0, 0, 3];
+const ARMOR_STRENGTH = [0, 0, 0, 3];
 
-export const BONUS_ORDER = [
-  BONUS.HELMET,
-  BONUS.TIMER,
-  BONUS.SHOWEL,
-  BONUS.STAR,
-  BONUS.GRENADE,
-  BONUS.TANK,
-  BONUS.STAR,
-  BONUS.GRENADE,
+const BONUS_ORDER = [
+  OBJECTS.BONUS.HELMET,
+  OBJECTS.BONUS.TIMER,
+  OBJECTS.BONUS.SHOWEL,
+  OBJECTS.BONUS.STAR,
+  OBJECTS.BONUS.GRENADE,
+  OBJECTS.BONUS.TANK,
+  OBJECTS.BONUS.STAR,
+  OBJECTS.BONUS.GRENADE,
 ];
 
-export const BONUS_CARRIER = {
+const BONUS_CARRIER = {
   '3': true,
   '10': true,
   '17': true,
+};
+
+export default {
+  ARMOR_STRENGTH,
+  BONUS_CARRIER,
+  BONUS_ORDER,
+  MOVEMENT_SPEED,
+  POSITION,
+  PROJECTILE_SPEED,
+  PROJECTILES_NUMBER,
+  TYPE_ORDER,
 };

@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 
-export default function Projectile({ direction, parent, position, power, speed }) {
+export function Projectile({ direction, parent, position, power, speed }) {
   return {
     direction,
     explosion: false,

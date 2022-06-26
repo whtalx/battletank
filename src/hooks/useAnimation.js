@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 
-export default function useAnimation({
+export function useAnimation({
   callback,
   duration,
   enabled = true,

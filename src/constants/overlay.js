@@ -1,4 +1,10 @@
-import { KEYS } from './settings';
+import SETTINGS from './settings';
 
-export const D_PAD = 'd-pad';
-export const { FIRE, START } = KEYS;
+const D_PAD = 'd-pad';
+const { FIRE, START } = SETTINGS.KEYS;
+
+export default {
+  D_PAD,
+  FIRE,
+  START,
+};

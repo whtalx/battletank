@@ -1,9 +1,12 @@
 import React, { memo, useEffect, useRef } from 'react';
 
-import { useShader, useTexture } from '../../hooks';
-import { areEqual } from '../../utils';
+import { areEqual } from '../../utils/iterable';
 
-import { OBJECTS, SHADER } from '../../constants';
+import { useTexture } from '../../hooks/useTexture';
+import { useShader } from '../../hooks/useShader';
+
+import OBJECTS from '../../constants/objects';
+import SHADER from '../../constants/shader';
 
 function Brick({ pattern, position, size }) {
   const shader = useRef(

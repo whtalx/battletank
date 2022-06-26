@@ -1,4 +1,6 @@
-export const PARENT = {
-  PLAYER: 'player',
-  ENEMY: 'enemy',
+export default {
+  PARENT: {
+    PLAYER: 'player',
+    ENEMY: 'enemy',
+  },
 };

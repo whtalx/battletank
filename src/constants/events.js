@@ -1,2 +1,4 @@
-export const UP = 'up';
-export const DOWN = 'down';
+export default {
+  UP: 'up',
+  DOWN: 'down',
+};

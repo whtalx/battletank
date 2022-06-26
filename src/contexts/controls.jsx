@@ -1,14 +1,15 @@
 import React, { createContext, useCallback, useEffect, useMemo, useRef } from 'react';
 
+import { useStore } from '../hooks/useStore';
+
 import { forEach, reduce } from '../utils/iterable';
-import useStore from '../hooks/useStore';
 
-import { DOWN, UP } from '../constants/events';
-import { KEYS } from '../constants/settings';
+import SETTINGS from '../constants/settings';
+import EVENTS from '../constants/events';
 
-export const Context = createContext();
+export const Controls = createContext();
 
-Context.displayName = 'ControlsContext';
+Controls.displayName = 'ControlsContext';
 
 function selector({ controls, settings: { keyBindings } }) {
   function reduceBindings(result, value, key) {
@@ -24,11 +25,11 @@ function selector({ controls, settings: { keyBindings } }) {
 
 function getInitialListeners() {
   function reduceKeys(result, key) {
-    result[key] = { [DOWN]: new Set(), [UP]: new Set() };
+    result[key] = { [EVENTS.DOWN]: new Set(), [EVENTS.UP]: new Set() };
     return result;
   }
 
-  return reduce(KEYS, {}, reduceKeys);
+  return reduce(SETTINGS.KEYS, {}, reduceKeys);
 }
 
 function getLastPressed({ key, keyPressed }) {
@@ -38,10 +39,10 @@ function getLastPressed({ key, keyPressed }) {
     }
 
     switch (keyName) {
-      case KEYS.DOWN:
-      case KEYS.LEFT:
-      case KEYS.RIGHT:
-      case KEYS.UP: {
+      case SETTINGS.KEYS.DOWN:
+      case SETTINGS.KEYS.LEFT:
+      case SETTINGS.KEYS.RIGHT:
+      case SETTINGS.KEYS.UP: {
         const latest = reduce(times, undefined, getLatest);
 
         if (!result.key || result.time < times[latest]) {
@@ -59,10 +60,10 @@ function getLastPressed({ key, keyPressed }) {
   }
 
   switch (key) {
-    case KEYS.DOWN:
-    case KEYS.LEFT:
-    case KEYS.RIGHT:
-    case KEYS.UP: {
+    case SETTINGS.KEYS.DOWN:
+    case SETTINGS.KEYS.LEFT:
+    case SETTINGS.KEYS.RIGHT:
+    case SETTINGS.KEYS.UP: {
       return reduce(keyPressed, {}, reduceKeys).key;
     }
 
@@ -72,7 +73,7 @@ function getLastPressed({ key, keyPressed }) {
   }
 }
 
-export function Provider({ children }) {
+Controls.Wrapper = function Wrapper({ children }) {
   const { bindings } = useStore(selector);
   const keyPressed = useRef({});
   const listeners = useRef(getInitialListeners());
@@ -95,7 +96,7 @@ export function Provider({ children }) {
           [keyCode]: Date.now(),
         };
 
-        if (!alreadyPressed) fireEvents({ event, key, type: DOWN });
+        if (!alreadyPressed) fireEvents({ event, key, type: EVENTS.DOWN });
       }
     },
     [],
@@ -114,9 +115,9 @@ export function Provider({ children }) {
           const lastPressed = getLastPressed({ key, keyPressed: keyPressed.current });
 
           if (lastPressed) {
-            fireEvents({ event, key: lastPressed, type: DOWN });
+            fireEvents({ event, key: lastPressed, type: EVENTS.DOWN });
           } else {
-            fireEvents({ event, key, type: UP });
+            fireEvents({ event, key, type: EVENTS.UP });
           }
         }
       }
@@ -164,22 +165,22 @@ export function Provider({ children }) {
   const contextValue = useMemo(
     function factory() {
       return {
-        [DOWN]: down,
-        [UP]: up,
+        [EVENTS.DOWN]: down,
+        [EVENTS.UP]: up,
         on: {
-          [DOWN](key, listener) {
-            listeners.current[key][DOWN].add(listener);
+          [EVENTS.DOWN](key, listener) {
+            listeners.current[key][EVENTS.DOWN].add(listener);
           },
-          [UP](key, listener) {
-            listeners.current[key][UP].add(listener);
+          [EVENTS.UP](key, listener) {
+            listeners.current[key][EVENTS.UP].add(listener);
           },
         },
         off: {
-          [DOWN](key, listener) {
-            listeners.current[key][DOWN].delete(listener);
+          [EVENTS.DOWN](key, listener) {
+            listeners.current[key][EVENTS.DOWN].delete(listener);
           },
-          [UP](key, listener) {
-            listeners.current[key][UP].delete(listener);
+          [EVENTS.UP](key, listener) {
+            listeners.current[key][EVENTS.UP].delete(listener);
           },
         },
       };
@@ -188,8 +189,8 @@ export function Provider({ children }) {
   );
 
   return (
-    <Context.Provider value={contextValue}>
+    <Controls.Provider value={contextValue}>
       {children}
-    </Context.Provider>
+    </Controls.Provider>
   );
-}
+};

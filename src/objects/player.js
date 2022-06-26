@@ -1,10 +1,13 @@
 import { v4 } from 'uuid';
 
-import { splice } from '../utils/iterable';
+import { getPlayerTankPosition } from '../utils/tank';
+import { getCollisionBlocks } from '../utils/collisions';
+import { areEqual, splice } from '../utils/iterable';
 
-import { PLAYER, TANK } from '../constants';
+import PLAYER from '../constants/player';
+import TANK from '../constants/tank';
 
-export default function Player({ index = 0, level = 0, ...rest }) {
+export function Player({ index = 0, level = 0, ...rest }) {
   return {
     direction: TANK.DIRECTION.NORTH,
     explosion: false,
@@ -26,9 +29,9 @@ export default function Player({ index = 0, level = 0, ...rest }) {
 
 Player.reset = function reset({ nest }) {
   return function resetPlayer(player) {
-    nest.deleteIn([player.id, 'explosion']);
-    nest.deleteIn([player.id, 'immobility']);
-    nest.setIn([player.id, 'shield'], PLAYER.SHIELD_TIMEOUT.SPAWN);
+    nest.deleteIn([player.id, TANK.EXPLOSION]);
+    nest.deleteIn([player.id, TANK.IMMOBILITY]);
+    nest.setIn([player.id, TANK.SHIELD], PLAYER.SHIELD_TIMEOUT.SPAWN);
 
     return {
       ...player,
@@ -42,13 +45,13 @@ Player.reset = function reset({ nest }) {
   };
 };
 
-Player.loop = function loop({ frame, nest }) {
+Player.loop = function loop({ frame, nest, state }) {
   return function updatePlayer(player) {
     if (player.explosion) {
-      const explosionTimeout = nest.getIn([player.id, 'explosion'], 0) - 1;
+      const explosionTimeout = nest.getIn([player.id, TANK.EXPLOSION], 0) - 1;
 
       if (explosionTimeout) {
-        nest.setIn([player.id, 'explosion'], explosionTimeout);
+        nest.setIn([player.id, TANK.EXPLOSION], explosionTimeout);
       } else {
         player.lives -= 1;
 
@@ -67,34 +70,50 @@ Player.loop = function loop({ frame, nest }) {
           }
         }
       }
-    } else if (player.immobility) {
-      const immobilityTimeout = nest.getIn([player.id, 'immobility'], 0) - 1;
-
-      if (immobilityTimeout) {
-        nest.setIn([player.id, 'immobility'], immobilityTimeout);
-      } else {
-        player.immobility = false;
-        nest.deleteIn([player.id, 'immobility']);
-      }
     } else {
       if (player.shield) {
-        const shieldTimeout = nest.getIn([player.id, 'shield'], 0) - 1;
+        const shieldTimeout = nest.getIn([player.id, TANK.SHIELD], 0) - 1;
 
         if (shieldTimeout) {
-          nest.setIn([player.id, 'shield'], shieldTimeout);
+          nest.setIn([player.id, TANK.SHIELD], shieldTimeout);
         } else {
           player.shield = false;
-          nest.deleteIn([player.id, 'shield']);
+          nest.deleteIn([player.id, TANK.SHIELD]);
         }
       }
 
-      if (player.moving && player.speed > frame) {
+      if (player.immobility) {
+        const immobilityTimeout = nest.getIn([player.id, TANK.IMMOBILITY], 0) - 1;
+
+        if (immobilityTimeout) {
+          nest.setIn([player.id, TANK.IMMOBILITY], immobilityTimeout);
+        } else {
+          player.immobility = false;
+          nest.deleteIn([player.id, TANK.IMMOBILITY]);
+        }
+      } else if (player.moving && player.speed > frame) {
         const { index, shift } = TANK.POSITION_SHIFT[player.direction];
         const changedPosition = player.position[index] + shift;
 
         if (Math.abs(changedPosition) <= TANK.POSITION_CONSTRAINT) {
-          // TODO: collisions
-          player.position = splice(player.position, index, changedPosition);
+          let newPosition = splice(player.position, index, changedPosition);
+          newPosition = getPlayerTankPosition({
+            blocks: getCollisionBlocks({
+              direction: player.direction,
+              map: state.map,
+              position: newPosition,
+              shifts: TANK.COLLISION_POINT_SHIFTS,
+            }),
+            direction: player.direction,
+            newPosition,
+            position: player.position,
+          });
+
+          if (!areEqual(newPosition, player.position)) {
+            player.position = newPosition;
+          } else if (player.moving) {
+            player.moving = false;
+          }
         } else {
           player.moving = false;
         }

@@ -1,7 +1,7 @@
 import createStore from 'zustand/vanilla';
 import produce from 'immer';
 
-import { MESSAGES } from '../../constants';
+import MESSAGES from '../../constants/messages';
 
 import { newGame } from '../../utils/game';
 

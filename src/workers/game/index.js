@@ -1,4 +1,4 @@
-import { Player } from '../../objects';
+import { Player } from '../../objects/player';
 
 import { changeStage } from '../../utils/game';
 import { saveUpdates } from './store';
@@ -6,7 +6,8 @@ import { splice } from '../../utils/iterable';
 import { loop } from './loop';
 import { nest } from './nest';
 
-import { GAME, MESSAGES } from '../../constants';
+import MESSAGES from '../../constants/messages';
+import GAME from '../../constants/game';
 
 self.onmessage = function onMessage({ data: { type, payload } }) {
   saveUpdates(function updateState(state) {

@@ -1,4 +1,4 @@
-export default function Nest() {
+export function Nest() {
   const root = {};
 
   function setInPath(path, instance, value) {

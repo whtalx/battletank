@@ -1,18 +1,25 @@
 import React, { useContext, useMemo, useRef } from 'react';
 
-import { Controls, Layout } from '../../contexts';
+import { Controls } from '../../contexts/controls';
+import { Layout } from '../../contexts/layout';
 
-import { usePointerEvent, useShader, useTexture } from '../../hooks';
+import { usePointerEvent } from '../../hooks/usePointerEvent';
+import { useTexture } from '../../hooks/useTexture';
+import { useShader } from '../../hooks/useShader';
 
-import { OVERLAY, SETTINGS, SHADER, Z_INDEX } from '../../constants';
+import OVERLAY from '../../constants/overlay';
+import LAYOUT from '../../constants/layout';
+import SETTINGS from '../../constants/settings';
+import SHADER from '../../constants/shader';
+
 import { TEXTURES } from '../../data';
 
 const BREAKPOINTS = [0.328125, 0.671875];
 
 export default function DPad() {
   const direction = useRef(null);
-  const { screen, view } = useContext(Layout.Context);
-  const { up, down } = useContext(Controls.Context);
+  const { screen, view } = useContext(Layout);
+  const { up, down } = useContext(Controls);
   const { position, size } = useMemo(
     function factory() {
       const width = TEXTURES[OVERLAY.D_PAD].height * screen.unit;
@@ -21,7 +28,7 @@ export default function DPad() {
         position: [
           (width - view.width) / 2 + 8 * screen.unit,
           (height - view.height) / 2 + 8 * screen.unit,
-          Z_INDEX.OVERLAY,
+          LAYOUT.Z_INDEX.OVERLAY,
         ],
         size: [width, height],
       };

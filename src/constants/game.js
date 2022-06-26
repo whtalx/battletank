@@ -1,6 +1,6 @@
-import { BONUS } from './objects';
+import OBJECTS from './objects';
 
-export const STATUS = {
+const STATUS = {
   COUNT: 'count',
   IDLE: 'idle',
   INTRO: 'intro',
@@ -9,9 +9,15 @@ export const STATUS = {
   WAITING: 'wait',
 };
 
-export const BONUS_TIMEOUT = {
-  [BONUS.TIMER]: 600,
-  [BONUS.SHOWEL]: 1200,
+const BONUS_TIMEOUT = {
+  [OBJECTS.BONUS.TIMER]: 600,
+  [OBJECTS.BONUS.SHOWEL]: 1200,
 };
 
-export const FRAME = 1000 / 60;
+const FRAME = 1000 / 60;
+
+export default {
+  BONUS_TIMEOUT,
+  FRAME,
+  STATUS,
+};

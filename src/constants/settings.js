@@ -1,4 +1,4 @@
-export const KEYS = {
+const KEYS = {
   START: 'start',
   SELECT: 'select',
   FIRE: 'fire',
@@ -8,7 +8,7 @@ export const KEYS = {
   RIGHT: 'right',
 };
 
-export const DEFAULT = {
+const DEFAULT = {
   keyBindings: {
     [KEYS.START]: 13,
     [KEYS.SELECT]: 16,
@@ -18,4 +18,9 @@ export const DEFAULT = {
     [KEYS.LEFT]: [37, 65],
     [KEYS.RIGHT]: [39, 68],
   },
+};
+
+export default {
+  DEFAULT,
+  KEYS,
 };

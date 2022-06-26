@@ -1,18 +1,22 @@
 import React, { memo, useContext } from 'react';
-import { OBJECTS, Z_INDEX } from '../../constants';
 
-import { Layout } from '../../contexts';
 import Text from '../Text';
 
-import { areEqual } from '../../utils';
-import { useTexture } from '../../hooks';
+import { Layout } from '../../contexts/layout';
+
+import { useTexture } from '../../hooks/useTexture';
+
+import { areEqual } from '../../utils/iterable';
+
+import OBJECTS from '../../constants/objects';
+import LAYOUT from '../../constants/layout';
 
 import { COLORS } from '../../data';
 
 const PLAYER_INDEX = ['I', 'Ⅱ'];
 
 function Background({ enemies, players, stage }) {
-  const { map, screen } = useContext(Layout.Context);
+  const { map, screen } = useContext(Layout);
   const blockSize = 8 * screen.unit;
   const left = (map.size + map.position[0]) / 2 + blockSize + screen.unit;
   const enemyUnit = useTexture(OBJECTS.UNIT);
@@ -28,7 +32,7 @@ function Background({ enemies, players, stage }) {
     const position = [
       left + blockSize * (index % 2),
       (map.size - blockSize) / 2 - blockSize * Math.floor(index / 2),
-      Z_INDEX.STATS,
+      LAYOUT.Z_INDEX.STATS,
     ];
 
     return (
@@ -54,14 +58,14 @@ function Background({ enemies, players, stage }) {
           position={[blockSize / 2, 0, 1]}
           unit={screen.unit}
         />
-        <mesh position={[0, -blockSize - screen.unit, Z_INDEX.STATS]}>
+        <mesh position={[0, -blockSize - screen.unit, LAYOUT.Z_INDEX.STATS]}>
           <planeBufferGeometry args={[blockSize, blockSize]} />
           <meshBasicMaterial map={playerLives} transparent />
         </mesh>
         <Text
           color={COLORS['1D']}
           text={lives}
-          position={[blockSize / 2 + blockSize / 2, -blockSize, Z_INDEX.STATS]}
+          position={[blockSize / 2 + blockSize / 2, -blockSize, LAYOUT.Z_INDEX.STATS]}
           unit={screen.unit}
         />
       </group>
@@ -77,14 +81,14 @@ function Background({ enemies, players, stage }) {
 
     return (
       <group position={position}>
-        <mesh position={[blockSize / 2, 0, Z_INDEX.STATS]}>
+        <mesh position={[blockSize / 2, 0, LAYOUT.Z_INDEX.STATS]}>
           <planeBufferGeometry args={[blockSize * 2, blockSize * 2]} />
           <meshBasicMaterial map={stageFlag} transparent />
         </mesh>
         <Text
           color={COLORS['1D']}
           text={stage}
-          position={[blockSize / 2, -1.5 * blockSize, Z_INDEX.STATS]}
+          position={[blockSize / 2, -1.5 * blockSize, LAYOUT.Z_INDEX.STATS]}
           unit={screen.unit}
         />
       </group>
@@ -93,7 +97,7 @@ function Background({ enemies, players, stage }) {
 
   return (
     <>
-      <mesh position={[0, 0, Z_INDEX.BACKGROUND]}>
+      <mesh position={[0, 0, LAYOUT.Z_INDEX.BACKGROUND]}>
         <planeBufferGeometry args={[screen.width, screen.height]} />
         <meshBasicMaterial color={COLORS['00']} />
       </mesh>

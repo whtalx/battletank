@@ -1,7 +1,8 @@
 import React from 'react';
-import { PLAYER } from '../../constants';
 
 import Player from './Player';
+
+import PLAYER from '../../constants/player';
 
 export default function Tank(props) {
   switch (props.type) {

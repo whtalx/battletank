@@ -1,8 +1,9 @@
 import produce from 'immer';
 
-import { getFromLocalStorage, isTouchDevice } from '../utils';
+import { getFromLocalStorage } from '../utils/localStorage';
+import { isTouchDevice } from '../utils/bool';
 
-import { SETTINGS } from '../constants';
+import SETTINGS from '../constants/settings';
 
 export default function settings(set) {
   return {

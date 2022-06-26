@@ -5,7 +5,7 @@ import { COLORS, TEXTURES } from '../data';
 
 const cache = {};
 
-export default function useTexture(name) {
+export function useTexture(name) {
   const canvas = useRef(document.createElement('canvas'));
 
   if (!TEXTURES.hasOwnProperty(name)) return null;

@@ -3,11 +3,17 @@ import React, { useEffect, useRef } from 'react';
 import Curtain from './Curtain';
 import Round from './Round';
 
-import { useKeyEvent, useStore } from '../../hooks';
-import { decrement, increment } from '../../utils';
+import { useKeyEvent } from '../../hooks/useKeyEvent';
+import { useStore } from '../../hooks/useStore';
+
+import { decrement, increment } from '../../utils/number';
 import { postMessage } from '../../workers';
 
-import { EVENTS, GAME, MESSAGES, SETTINGS, TANK } from '../../constants';
+import EVENTS from '../../constants/events';
+import GAME from '../../constants/game';
+import MESSAGES from '../../constants/messages';
+import SETTINGS from '../../constants/settings';
+import TANK from '../../constants/tank';
 
 function selector({ game: { stage, status }, session: { setSession, ...session } }) {
   return { game: { stage, status }, session };

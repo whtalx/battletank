@@ -1,4 +1,5 @@
-export const BLOCK = {
+const BLOCK = {
+  BASE: 'base',
   BRICK: 'brick',
   EMPTY: 'empty',
   ICE: 'ice',
@@ -7,21 +8,39 @@ export const BLOCK = {
   WATER: 'water',
 };
 
-export const BASE = 'base';
+const STAGE = 'stage';
 
-export const STAGE = 'stage';
+const SHIELD = 'shield';
 
-export const SHIELD = 'shield';
+const LIVES = 'lives';
 
-export const LIVES = 'lives';
+const UNIT = 'unit';
 
-export const UNIT = 'unit';
-
-export const BONUS = {
+const BONUS = {
   GRENADE: 'grenade',
   HELMET: 'helmet',
   SHOWEL: 'showel',
   STAR: 'star',
   TANK: 'tank',
   TIMER: 'timer',
+};
+
+const BLOCK_TYPE_ORDER = [
+  null,
+  BLOCK.BRICK,
+  BLOCK.STEEL,
+  BLOCK.TREE,
+  BLOCK.ICE,
+  BLOCK.WATER,
+  BLOCK.BASE,
+];
+
+export default {
+  BLOCK_TYPE_ORDER,
+  BLOCK,
+  BONUS,
+  LIVES,
+  SHIELD,
+  STAGE,
+  UNIT,
 };

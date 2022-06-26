@@ -42,7 +42,7 @@ function reducePaths(shape, path, index) {
     };
 }
 
-export default function useFont(character) {
+export function useFont(character) {
   if (!FONT.hasOwnProperty(character)) return null;
 
   if (!cache.hasOwnProperty(character)) {

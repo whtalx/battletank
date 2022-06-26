@@ -1,12 +1,16 @@
 import React, { useContext, useRef } from 'react';
 
-import { useAnimation, useShader, useTexture } from '../../hooks';
-import { Layout } from '../../contexts';
+import { Layout } from '../../contexts/layout';
 
-import { OBJECTS, SHADER } from '../../constants';
+import { useAnimation } from '../../hooks/useAnimation';
+import { useTexture } from '../../hooks/useTexture';
+import { useShader } from '../../hooks/useShader';
+
+import OBJECTS from '../../constants/objects';
+import SHADER from '../../constants/shader';
 
 export default function Shield() {
-  const { block: { size } } = useContext(Layout.Context);
+  const { block: { size } } = useContext(Layout);
   const shader = useRef(
     useShader({
       fragment: SHADER.ANIMATED,

@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 
-import { void0 } from '../utils';
+import { void0 } from '../utils/void0';
 
 const TYPE = {
   OVER: 'over',
   OFF: 'off',
 };
 
-export default function usePointerEvent({
+export function usePointerEvent({
   onDown = void0,
   onEnter = void0,
   onLeave = void0,

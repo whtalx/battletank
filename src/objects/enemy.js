@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 
-import { ENEMY, TANK } from '../constants';
+import ENEMY from '../constants/enemy';
+import TANK from '../constants/tank';
 
 function getBonus(index) {
   return ENEMY.BONUS_CARRIER[index]
@@ -8,7 +9,7 @@ function getBonus(index) {
     : null;
 }
 
-export default function Enemy({ index = 0, level = 0 }) {
+export function Enemy({ index = 0, level = 0 }) {
   return {
     armor: ENEMY.ARMOR_STRENGTH[level],
     bonus: getBonus(index),

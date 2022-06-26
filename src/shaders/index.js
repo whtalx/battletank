@@ -9,7 +9,7 @@ import animatedTransformVertex from './animatedTransform.vert';
 import constantVertex from './constant.vert';
 // import transformVertex from './transform.vert';
 
-import { SHADER } from '../constants';
+import SHADER from '../constants/shader';
 
 export const FRAGMENT = {
   [SHADER.ANIMATED]: animatedFragment,

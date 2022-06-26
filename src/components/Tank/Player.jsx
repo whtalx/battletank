@@ -2,11 +2,17 @@ import React, { memo, useContext, useEffect, useMemo, useRef } from 'react';
 
 import Shield from './Shield';
 
-import { useShader, useTexture } from '../../hooks';
-import { areEqual } from '../../utils';
-import { Layout } from '../../contexts';
+import { Layout } from '../../contexts/layout';
 
-import { PLAYER, SHADER, TANK, Z_INDEX } from '../../constants';
+import { useTexture } from '../../hooks/useTexture';
+import { useShader } from '../../hooks/useShader';
+
+import { areEqual } from '../../utils/iterable';
+
+import LAYOUT from '../../constants/layout';
+import TANK from '../../constants/tank';
+import PLAYER from '../../constants/player';
+import SHADER from '../../constants/shader';
 
 function Player({ direction, index, position, shield, type }) {
   const shader = useRef(
@@ -29,7 +35,7 @@ function Player({ direction, index, position, shield, type }) {
     block: { size },
     map: { position: [mx, my] },
     screen: { unit },
-  } = useContext(Layout.Context);
+  } = useContext(Layout);
 
   const [tx, ty] = position;
 
@@ -52,7 +58,7 @@ function Player({ direction, index, position, shield, type }) {
 
   const meshPosition = useMemo(
     function factory() {
-      return [tx * unit + mx, ty * unit + my, Z_INDEX.TANK];
+      return [tx * unit + mx, ty * unit + my, LAYOUT.Z_INDEX.TANK];
     },
     [mx, my, tx, ty, unit],
   );

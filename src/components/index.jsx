@@ -3,15 +3,16 @@ import React from 'react';
 import Overlay from './Overlay';
 import Game from './Game';
 
-import { Controls, Layout } from '../contexts';
+import { Controls } from '../contexts/controls';
+import { Layout } from '../contexts/layout';
 
 export default function App() {
   return (
-    <Controls.Provider>
-      <Layout.Provider>
+    <Controls.Wrapper>
+      <Layout.Wrapper>
         <Game />
         <Overlay />
-      </Layout.Provider>
-    </Controls.Provider>
+      </Layout.Wrapper>
+    </Controls.Wrapper>
   );
 }

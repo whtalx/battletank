@@ -1,6 +1,6 @@
-import { FRAME } from '../constants/game';
+import GAME from '../constants/game';
 
-export default function Loop(callback) {
+export function Loop(callback) {
   let interval;
   let frame = 0;
 
@@ -11,7 +11,7 @@ export default function Loop(callback) {
 
   return {
     start() {
-      interval = setInterval(loopCallback, FRAME);
+      interval = setInterval(loopCallback, GAME.FRAME);
     },
     stop() {
       interval = clearInterval(interval);

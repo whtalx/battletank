@@ -16,10 +16,12 @@ import TREE from './tree.json';
 import UNIT from './unit.json';
 import WATER from './water.json';
 
-import { OBJECTS, OVERLAY, PLAYER } from '../../constants';
+import OBJECTS from '../../constants/objects';
+import OVERLAY from '../../constants/overlay';
+import PLAYER from '../../constants/player';
 
 export default {
-  [OBJECTS.BASE]: BASE,
+  [OBJECTS.BLOCK.BASE]: BASE,
   [OBJECTS.BLOCK.BRICK]: BRICK,
   [OBJECTS.BLOCK.ICE]: ICE,
   [OBJECTS.BLOCK.STEEL]: STEEL,

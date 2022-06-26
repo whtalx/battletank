@@ -1,4 +1,7 @@
-import { Enemy, Loop, Player, Projectile } from '../../objects';
+import { Player } from '../../objects/player';
+import { Enemy } from '../../objects/enemy';
+import { Loop } from '../../objects/loop';
+import { Projectile } from '../../objects/projectile';
 
 import { saveUpdates } from './store';
 import { nest } from './nest';
