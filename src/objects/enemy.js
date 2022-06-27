@@ -19,6 +19,7 @@ export function Enemy({ index = 0, level = 0 }) {
     index,
     position: ENEMY.POSITION[index % ENEMY.POSITION.length],
     projectilesNumber: ENEMY.PROJECTILES_NUMBER[level],
+    projectilePower: ENEMY.PROJECTILE_POWER[level],
     projectileSpeed: ENEMY.PROJECTILE_SPEED[level],
     speed: ENEMY.MOVEMENT_SPEED[level],
     type: ENEMY.TYPE_ORDER[level],

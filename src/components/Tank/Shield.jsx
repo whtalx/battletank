@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 
 import { Layout } from '../../contexts/layout';
 
@@ -32,10 +32,24 @@ export default function Shield() {
     offset: 0.5,
   });
 
+  const geometryArgs = useMemo(
+    function factory() {
+      return [size, size];
+    },
+    [size],
+  );
+
+  const materialArgs = useMemo(
+    function factory() {
+      return [shader.current];
+    },
+    [],
+  );
+
   return (
     <mesh>
-      <planeBufferGeometry args={[size, size]} />
-      <shaderMaterial args={[shader.current]} />
+      <planeBufferGeometry args={geometryArgs} />
+      <shaderMaterial args={materialArgs} />
     </mesh>
   );
 }

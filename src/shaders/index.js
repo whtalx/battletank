@@ -7,7 +7,7 @@ import patternFragment from './pattern.frag';
 import animatedVertex from './animated.vert';
 import animatedTransformVertex from './animatedTransform.vert';
 import constantVertex from './constant.vert';
-// import transformVertex from './transform.vert';
+import transformVertex from './transform.vert';
 
 import SHADER from '../constants/shader';
 
@@ -24,5 +24,5 @@ export const VERTEX = {
   [SHADER.ANIMATED]: animatedVertex,
   [SHADER.ANIMATED_TRANSFORM]: animatedTransformVertex,
   [SHADER.CONSTANT]: constantVertex,
-  // [SHADER.TRANSFORM]: transformVertex,
+  [SHADER.TRANSFORM]: transformVertex,
 };

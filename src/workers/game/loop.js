@@ -8,7 +8,7 @@ import { nest } from './nest';
 
 function loopCallback(frame) {
   saveUpdates(function updateState(state) {
-    state.projectiles.forEach(Projectile.loop({ frame, nest, state }));
+    state.projectiles = state.projectiles.reduce(Projectile.loop({ frame, nest }), []);
     state.players.forEach(Player.loop({ frame, nest, state }));
     state.enemies.forEach(Enemy.loop({ frame, nest, state }));
 

@@ -1,7 +1,5 @@
 import React, { memo, useContext, useEffect, useMemo, useRef } from 'react';
 
-import Shield from './Shield';
-
 import { Layout } from '../../contexts/layout';
 
 import { useTexture } from '../../hooks/useTexture';
@@ -9,44 +7,32 @@ import { useShader } from '../../hooks/useShader';
 
 import { areEqual } from '../../utils/iterable';
 
-import LAYOUT from '../../constants/layout';
-import TANK from '../../constants/tank';
-import PLAYER from '../../constants/player';
+import OBJECTS from '../../constants/objects';
 import SHADER from '../../constants/shader';
+import LAYOUT from '../../constants/layout';
 
-function Player({ direction, index, position: [positionX, positionY], shield, type }) {
+const ONE_THIRD = 1 / 3;
+
+function Hit({ explosion, position: [positionX, positionY] }) {
   const { block: { size }, map: { position: [mapX, mapY] }, screen: { unit } } = useContext(Layout);
   const shader = useRef(
     useShader({
-      fragment: SHADER.ANIMATED_COLOR_MAP,
-      vertex: SHADER.ANIMATED_TRANSFORM,
+      fragment: SHADER.ANIMATED,
+      vertex: SHADER.ANIMATED,
       uniforms: {
         u_area: [1, 1],
-        u_color: PLAYER.COLORS_ORDER[index],
-        u_map: useTexture(type),
+        u_map: useTexture(OBJECTS.HIT),
         u_offset: [0, 0],
-        u_scale: [0.5, 1],
-        u_rotation: TANK.ROTATION[direction],
-        u_transform: TANK.TRANSFORM[direction],
+        u_scale: [ONE_THIRD, 1],
       },
     }),
   );
 
   useEffect(
     function effect() {
-      shader.current.uniforms.u_rotation.value = TANK.ROTATION[direction];
-      shader.current.uniforms.u_transform.value = TANK.TRANSFORM[direction];
+      shader.current.uniforms.u_offset.value[0] = ONE_THIRD * (explosion - 1);
     },
-    [direction],
-  );
-
-  useEffect(
-    function effect() {
-      shader.current.uniforms.u_offset.value[0] = shader.current.uniforms.u_offset.value[0]
-        ? 0
-        : shader.current.uniforms.u_scale.value[0];
-    },
-    [positionX, positionY],
+    [explosion],
   );
 
   const meshPosition = useMemo(
@@ -54,7 +40,7 @@ function Player({ direction, index, position: [positionX, positionY], shield, ty
       return [
         positionX * unit + mapX,
         positionY * unit + mapY,
-        LAYOUT.Z_INDEX.TANK,
+        LAYOUT.Z_INDEX.PROJECTILE,
       ];
     },
     [mapX, mapY, positionX, positionY, unit],
@@ -78,9 +64,8 @@ function Player({ direction, index, position: [positionX, positionY], shield, ty
     <mesh position={meshPosition}>
       <planeBufferGeometry args={geometryArgs} />
       <shaderMaterial args={materialArgs} />
-      {shield && <Shield />}
     </mesh>
   );
 }
 
-export default memo(Player, areEqual);
+export default memo(Hit, areEqual);

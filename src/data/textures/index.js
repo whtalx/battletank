@@ -2,12 +2,14 @@ import BASE from './base.json';
 import BRICK from './brick.json';
 import D_PAD from './d-pad.json';
 import FIRE from './fire.json';
+import HIT from './hit.json';
 import ICE from './ice.json';
 import LIVES from './lives.json';
 import PLAYER_BASIC from './player-basic.json';
 import PLAYER_DOUBLE_SHOT from './player-double-shot.json';
 import PLAYER_FAST_SHOT from './player-fast-shot.json';
 import PLAYER_POWER_SHOT from './player-power-shot.json';
+import PROJECTILE from './projectile.json';
 import SHIELD from './shield.json';
 import STAGE from './stage.json';
 import START from './start.json';
@@ -27,6 +29,8 @@ export default {
   [OBJECTS.BLOCK.STEEL]: STEEL,
   [OBJECTS.BLOCK.TREE]: TREE,
   [OBJECTS.BLOCK.WATER]: WATER,
+  [OBJECTS.HIT]: HIT,
+  [OBJECTS.PROJECTILE]: PROJECTILE,
   [OBJECTS.SHIELD]: SHIELD,
   [OBJECTS.STAGE]: STAGE,
   [OBJECTS.LIVES]: LIVES,

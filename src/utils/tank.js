@@ -103,3 +103,13 @@ export function getPlayerTankPosition({ direction, blocks, newPosition, position
     }
   }
 }
+
+export function canFire({ id, projectiles, projectilesNumber }) {
+  function reduceProjectiles(result, projectile) {
+    return projectile.parent === id
+      ? result + 1
+      : result;
+  }
+
+  return projectiles.reduce(reduceProjectiles, 0) < projectilesNumber;
+}

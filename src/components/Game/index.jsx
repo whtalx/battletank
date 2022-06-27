@@ -247,6 +247,21 @@ export default function Game() {
     },
   });
 
+  useKeyEvent({
+    key: SETTINGS.KEYS.FIRE,
+    type: EVENTS.DOWN,
+    listener() {
+      if (stateRef.current.game.status !== GAME.STATUS.RUNNING) return;
+
+      postMessage({
+        type: MESSAGES.FIRE,
+        payload: {
+          session: stateRef.current.session,
+        },
+      });
+    },
+  });
+
   switch (state.game.status) {
     case GAME.STATUS.WAITING: {
       return (

@@ -19,6 +19,7 @@ export function Player({ index = 0, level = 0, ...rest }) {
     moving: false,
     position: PLAYER.POSITION[index],
     projectilesNumber: PLAYER.PROJECTILES_NUMBER[level],
+    projectilePower: PLAYER.PROJECTILE_POWER[level],
     projectileSpeed: PLAYER.PROJECTILE_SPEED[level],
     shield: false,
     speed: PLAYER.MOVEMENT_SPEED[level],

@@ -16,6 +16,10 @@ const LIVES = 'lives';
 
 const UNIT = 'unit';
 
+const PROJECTILE = 'projectile';
+
+const HIT = 'hit';
+
 const BONUS = {
   GRENADE: 'grenade',
   HELMET: 'helmet',
@@ -39,7 +43,9 @@ export default {
   BLOCK_TYPE_ORDER,
   BLOCK,
   BONUS,
+  HIT,
   LIVES,
+  PROJECTILE,
   SHIELD,
   STAGE,
   UNIT,

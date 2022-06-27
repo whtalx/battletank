@@ -1,11 +1,15 @@
 import { Player } from '../../objects/player';
 
+import { Projectile } from '../../objects/projectile';
+
 import { changeStage } from '../../utils/game';
 import { saveUpdates } from './store';
+import { canFire } from '../../utils/tank';
 import { splice } from '../../utils/iterable';
 import { loop } from './loop';
 import { nest } from './nest';
 
+import PROJECTILE from '../../constants/projectile';
 import MESSAGES from '../../constants/messages';
 import GAME from '../../constants/game';
 
@@ -77,6 +81,30 @@ self.onmessage = function onMessage({ data: { type, payload } }) {
         }
 
         updates.players = splice(state.players, index, player);
+
+        break;
+      }
+
+      case MESSAGES.FIRE: {
+        const { session: { index, id } } = payload;
+        const player = state.players[index];
+
+        if (
+          id !== player.id ||
+          !canFire({
+            id,
+            projectiles: state.projectiles,
+            projectilesNumber: player.projectilesNumber,
+          })
+        ) {
+          break;
+        }
+
+        updates.projectiles = splice(
+          state.projectiles,
+          state.projectiles.length,
+          Projectile({ parent: player, type: PROJECTILE.PARENT.PLAYER }),
+        );
 
         break;
       }
