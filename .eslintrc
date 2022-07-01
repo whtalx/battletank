@@ -10,6 +10,7 @@
     "import/no-extraneous-dependencies": "off",
     "no-else-return": "off",
     "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-lonely-if": "off",
     "no-nested-ternary": "off",
     "no-param-reassign": ["error", { "props": false }],
     "no-prototype-builtins": "off",

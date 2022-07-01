@@ -27,7 +27,11 @@ export function Enemy({ index = 0, level = 0 }) {
 }
 
 Enemy.loop = function loop({ frame, nest, state }) {
-  return function updateEnemy(enemy) {
+  return function updateEnemy(enemies, enemy) {
     // TODO: state machine
+
+    enemies.push(enemy);
+
+    return enemies;
   };
 };

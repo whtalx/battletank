@@ -8,9 +8,9 @@ import { nest } from './nest';
 
 function loopCallback(frame) {
   saveUpdates(function updateState(state) {
-    state.projectiles = state.projectiles.reduce(Projectile.loop({ frame, nest }), []);
-    state.players.forEach(Player.loop({ frame, nest, state }));
-    state.enemies.forEach(Enemy.loop({ frame, nest, state }));
+    state.projectiles = state.projectiles.reduce(Projectile.loop({ frame, nest, state }), []);
+    state.players = state.players.reduce(Player.loop({ frame, nest, state }), []);
+    state.enemies = state.enemies.reduce(Enemy.loop({ frame, nest, state }), []);
 
     // if (state.enemiesDetachment.length && frame % state.enemySpawnTimeout === 0) {
     //   const index = 20 - state.enemiesDetachment.length;

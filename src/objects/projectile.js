@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 
-import { getStartPosition } from '../utils/projectile';
+import { getCollisionEffects, getStartPosition } from '../utils/projectile';
+import { getCollisionBlocks } from '../utils/collisions';
 import { splice } from '../utils/iterable';
 
 import PROJECTILE from '../constants/projectile';
@@ -19,7 +20,7 @@ export function Projectile({ parent, type }) {
   };
 }
 
-Projectile.loop = function loop({ frame }) {
+Projectile.loop = function loop({ frame, state }) {
   return function updateProjectile(projectiles, projectile) {
     if (projectile.explosion) {
       if (frame === 0) {
@@ -32,10 +33,32 @@ Projectile.loop = function loop({ frame }) {
       const changedPosition = projectile.position[index] + shift * projectile.speed;
 
       if (Math.abs(changedPosition) > PROJECTILE.POSITION_CONSTRAINT) {
-        // TODO: collisions
         projectile.explosion = 1;
       } else {
-        projectile.position = splice(projectile.position, index, changedPosition);
+        const newPosition = splice(projectile.position, index, changedPosition);
+        const { explosion, ...updates } = getCollisionEffects({
+          blocks: getCollisionBlocks({
+            direction: projectile.direction,
+            map: state.map,
+            points: PROJECTILE.COLLISION_POINTS,
+            position: newPosition,
+          }),
+          direction: projectile.direction,
+          power: projectile.power,
+          state,
+        });
+
+        if (explosion) {
+          for (const key in updates) {
+            if (updates.hasOwnProperty(key)) {
+              state[key] = updates[key];
+            }
+          }
+
+          projectile.explosion = 1;
+        } else {
+          projectile.position = newPosition;
+        }
       }
     }
 

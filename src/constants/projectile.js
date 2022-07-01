@@ -1,3 +1,4 @@
+import OBJECTS from './objects';
 import LAYOUT from './layout';
 
 const PARENT = {
@@ -5,12 +6,33 @@ const PARENT = {
   ENEMY: 'enemy',
 };
 
-const SIZE = LAYOUT.BLOCK_PATTERN;
+const SIZE = 4;
+
+const COLLISION_SHIFT = SIZE / 2;
+
+const COLLISION_POINTS = [
+  [-COLLISION_SHIFT, COLLISION_SHIFT],
+  [COLLISION_SHIFT, COLLISION_SHIFT],
+];
 
 const POSITION_CONSTRAINT = (LAYOUT.MAP_SIZE - SIZE) / 2;
 
+const POWER = {
+  HALF: 1,
+  FULL: 2,
+};
+
+const POWER_NEEDED_TO_DAMAGE = {
+  [OBJECTS.BLOCK.BRICK]: POWER.HALF,
+  [OBJECTS.BLOCK.STEEL]: POWER.FULL,
+};
+
 export default {
+  COLLISION_POINTS,
+  COLLISION_SHIFT,
   PARENT,
   POSITION_CONSTRAINT,
+  POWER,
+  POWER_NEEDED_TO_DAMAGE,
   SIZE,
 };

@@ -47,7 +47,7 @@ Player.reset = function reset({ nest }) {
 };
 
 Player.loop = function loop({ frame, nest, state }) {
-  return function updatePlayer(player) {
+  return function updatePlayer(players, player) {
     if (player.explosion) {
       const explosionTimeout = nest.getIn([player.id, TANK.EXPLOSION], 0) - 1;
 
@@ -102,8 +102,8 @@ Player.loop = function loop({ frame, nest, state }) {
             blocks: getCollisionBlocks({
               direction: player.direction,
               map: state.map,
+              points: TANK.COLLISION_POINTS,
               position: newPosition,
-              shifts: TANK.COLLISION_POINT_SHIFTS,
             }),
             direction: player.direction,
             newPosition,
@@ -112,13 +112,15 @@ Player.loop = function loop({ frame, nest, state }) {
 
           if (!areEqual(newPosition, player.position)) {
             player.position = newPosition;
-          } else if (player.moving) {
-            player.moving = false;
           }
         } else {
           player.moving = false;
         }
       }
     }
+
+    players.push(player);
+
+    return players;
   };
 };

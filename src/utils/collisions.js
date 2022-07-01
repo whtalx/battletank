@@ -3,7 +3,7 @@ import OBJECTS from '../constants/objects';
 import LAYOUT from '../constants/layout';
 import TANK from '../constants/tank';
 
-export function getCollisionBlocks({ direction, map, position, shifts }) {
+export function getCollisionBlocks({ direction, map, position, points }) {
   const [x, y] = position;
 
   function getPoint(shift, pointIndex) {
@@ -44,20 +44,20 @@ export function getCollisionBlocks({ direction, map, position, shifts }) {
     }
   }
 
-  function mapShifts(shift, pointIndex) {
-    const point = getPoint(shift, pointIndex);
+  function mapPoints(item, pointIndex) {
+    const point = getPoint(item, pointIndex);
 
     function getIndexes(coord) {
-      const part = (coord * 13) / 208;
+      const part = (coord * LAYOUT.MAP_BLOCKS) / LAYOUT.MAP_SIZE;
       const blockIndex = Math.floor(part);
-      const patternIndex = Math.floor((part - blockIndex) * LAYOUT.BLOCK_PATTERN);
+      const patternIndex = Math.floor((part - blockIndex) * LAYOUT.PATTERN_SIDE);
       return { blockIndex, patternIndex };
     }
 
-    const { blockIndex: blockRow, patternIndex: patternRow } = getIndexes(point[1], 1);
-    const { blockIndex: blockCell, patternIndex: patternCell } = getIndexes(point[0], 0);
+    const { blockIndex: blockRow, patternIndex: patternRow } = getIndexes(point[1]);
+    const { blockIndex: blockCell, patternIndex: patternCell } = getIndexes(point[0]);
 
-    if (blockRow > 12 || blockCell > 12) return {};
+    if (blockRow > map.length || blockCell > map[0].length) return {};
 
     const { pattern, type } = map[blockRow][blockCell];
 
@@ -72,50 +72,130 @@ export function getCollisionBlocks({ direction, map, position, shifts }) {
     };
   }
 
-  return shifts.map(mapShifts);
+  return points.map(mapPoints);
 }
 
-export function getPatternCollisionType({ block, direction }) {
-  const { patternCell } = block;
-
-  function filterLast(item, index) {
-    return (index % LAYOUT.BLOCK_PATTERN) >= patternCell;
-  }
+export function getPatternCollisionType({ block, direction, spectrum }) {
+  const { pattern, patternCell, patternRow, pointIndex } = block;
 
   function filterFirst(item, index) {
-    return (index % LAYOUT.BLOCK_PATTERN) <= patternCell;
+    const modulus = index % LAYOUT.PATTERN_SIDE;
+
+    switch (direction) {
+      case TANK.DIRECTION.EAST:
+      case TANK.DIRECTION.WEST: {
+        return modulus <= patternCell;
+      }
+
+      case TANK.DIRECTION.NORTH:
+      case TANK.DIRECTION.SOUTH: {
+        return (
+          modulus <= patternCell && (
+            (!modulus && !Math.max(0, patternCell - spectrum)) ||
+            (modulus > Math.max(0, patternCell - spectrum))
+          )
+        );
+      }
+
+      default: {
+        return false;
+      }
+    }
+  }
+
+  function filterLast(item, index) {
+    const modulus = index % LAYOUT.PATTERN_SIDE;
+
+    switch (direction) {
+      case TANK.DIRECTION.EAST:
+      case TANK.DIRECTION.WEST: {
+        return modulus >= patternCell;
+      }
+
+      case TANK.DIRECTION.NORTH:
+      case TANK.DIRECTION.SOUTH: {
+        return (
+          modulus >= patternCell &&
+          modulus < Math.min(LAYOUT.PATTERN_SIDE, patternCell + spectrum)
+        );
+      }
+
+      default: {
+        return false;
+      }
+    }
   }
 
   function summarise(result, value) {
-    return result + value;
+    return Math.min(result + value, COLLISIONS.TYPE.COLLIDE);
+  }
+
+  function getValuesBefore() {
+    switch (direction) {
+      case TANK.DIRECTION.EAST:
+      case TANK.DIRECTION.WEST: {
+        return pattern.slice(
+          Math.max(0, patternRow - spectrum) * LAYOUT.PATTERN_SIDE,
+          (patternRow + 1) * LAYOUT.PATTERN_SIDE,
+        );
+      }
+
+      case TANK.DIRECTION.NORTH:
+      case TANK.DIRECTION.SOUTH: {
+        return pattern.slice(0, (patternRow + 1) * LAYOUT.PATTERN_SIDE);
+      }
+
+      default: {
+        return [];
+      }
+    }
+  }
+
+  function getValuesAfter() {
+    switch (direction) {
+      case TANK.DIRECTION.EAST:
+      case TANK.DIRECTION.WEST: {
+        return pattern.slice(
+          patternRow * LAYOUT.PATTERN_SIDE,
+          Math.min(LAYOUT.PATTERN_TOTAL, (patternRow + spectrum) * LAYOUT.PATTERN_SIDE),
+        );
+      }
+
+      case TANK.DIRECTION.NORTH:
+      case TANK.DIRECTION.SOUTH: {
+        return pattern.slice(patternRow * LAYOUT.PATTERN_SIDE);
+      }
+
+      default: {
+        return [];
+      }
+    }
   }
 
   function getPattern() {
-    const { pattern, patternRow, pointIndex } = block;
-
     switch (direction) {
       case TANK.DIRECTION.EAST: {
         return pointIndex
-          ? pattern.slice(0, (patternRow + 1) * LAYOUT.BLOCK_PATTERN).filter(filterFirst)
-          : pattern.slice(patternRow * LAYOUT.BLOCK_PATTERN).filter(filterFirst);
+          ? getValuesBefore().filter(filterFirst)
+          : getValuesAfter().filter(filterFirst);
       }
 
       case TANK.DIRECTION.NORTH: {
         return pointIndex
-          ? pattern.slice(patternRow * LAYOUT.BLOCK_PATTERN).filter(filterFirst)
-          : pattern.slice(patternRow * LAYOUT.BLOCK_PATTERN).filter(filterLast);
+          ? getValuesAfter().filter(filterFirst)
+          : getValuesAfter().filter(filterLast);
       }
 
       case TANK.DIRECTION.SOUTH: {
         return pointIndex
-          ? pattern.slice(0, (patternRow + 1) * LAYOUT.BLOCK_PATTERN).filter(filterFirst)
-          : pattern.slice(0, (patternRow + 1) * LAYOUT.BLOCK_PATTERN).filter(filterLast);
+          ? getValuesBefore().filter(filterFirst)
+          : getValuesBefore().filter(filterLast);
       }
 
       case TANK.DIRECTION.WEST: {
         return pointIndex
-          ? pattern.slice(0, (patternRow + 1) * LAYOUT.BLOCK_PATTERN).filter(filterLast)
-          : pattern.slice(patternRow * LAYOUT.BLOCK_PATTERN).filter(filterLast);
+          ? getValuesBefore().filter(filterLast)
+          : getValuesAfter().filter(filterLast);
       }
 
       default: {

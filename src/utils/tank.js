@@ -1,9 +1,11 @@
+import { getPatternCollisionType } from './collisions';
+
 import COLLISIONS from '../constants/collisions';
 import OBJECTS from '../constants/objects';
 import LAYOUT from '../constants/layout';
 import TANK from '../constants/tank';
 
-import { getPatternCollisionType } from './collisions';
+const spectrum = LAYOUT.PATTERN_SIDE;
 
 export function getPlayerTankPosition({ direction, blocks, newPosition, position }) {
   function reduceBlocks(result, block) {
@@ -12,7 +14,7 @@ export function getPlayerTankPosition({ direction, blocks, newPosition, position
       case OBJECTS.BLOCK.BRICK:
       case OBJECTS.BLOCK.STEEL:
       case OBJECTS.BLOCK.WATER: {
-        switch (getPatternCollisionType({ direction, block })) {
+        switch (getPatternCollisionType({ direction, block, spectrum })) {
           case COLLISIONS.TYPE.PASS: {
             break;
           }
@@ -47,8 +49,8 @@ export function getPlayerTankPosition({ direction, blocks, newPosition, position
 
   function getBlockCenter({ block, pattern, point }) {
     return point
-      ? (block - 1) * LAYOUT.BLOCK_SIZE + pattern * LAYOUT.BLOCK_PATTERN + LAYOUT.BLOCK_OFFSET
-      : block * LAYOUT.BLOCK_SIZE + (pattern + 1) * LAYOUT.BLOCK_PATTERN + LAYOUT.BLOCK_OFFSET;
+      ? (block - 1) * LAYOUT.BLOCK_SIZE + pattern * LAYOUT.PATTERN_SIDE + LAYOUT.BLOCK_OFFSET
+      : block * LAYOUT.BLOCK_SIZE + (pattern + 1) * LAYOUT.PATTERN_SIDE + LAYOUT.BLOCK_OFFSET;
   }
 
   const { block, type } = blocks.reduce(reduceBlocks, { type: COLLISIONS.TYPE.PASS });
@@ -64,30 +66,26 @@ export function getPlayerTankPosition({ direction, blocks, newPosition, position
       switch (direction) {
         case TANK.DIRECTION.EAST:
         case TANK.DIRECTION.WEST: {
-          const blockCenter = getBlockCenter({
+          const y = LAYOUT.MAP_HALF - getBlockCenter({
             block: blockRow,
             pattern: patternRow,
             point: pointIndex,
           });
 
-          const y = LAYOUT.MAP_HALF - blockCenter;
-
-          return Math.abs(y - newPosition[1] < LAYOUT.BLOCK_PATTERN)
+          return Math.abs(y - newPosition[1]) < LAYOUT.PATTERN_SIDE
             ? [newPosition[0], y]
             : position;
         }
 
         case TANK.DIRECTION.NORTH:
         case TANK.DIRECTION.SOUTH: {
-          const blockCenter = getBlockCenter({
+          const x = getBlockCenter({
             block: blockCell,
             pattern: patternCell,
             point: pointIndex,
-          });
+          }) - LAYOUT.MAP_HALF;
 
-          const x = blockCenter - LAYOUT.MAP_HALF;
-
-          return Math.abs(x - newPosition[0] < LAYOUT.BLOCK_PATTERN)
+          return Math.abs(x - newPosition[0]) < LAYOUT.PATTERN_SIDE
             ? [x, newPosition[1]]
             : position;
         }
